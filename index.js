@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 
 client.on("ready", () => {
-    client.user.setActivity(`Use !help`);
+    client.user.setActivity(`Use >help`);
     console.log("Ready!")
 });
 
@@ -30,7 +30,7 @@ client.on('message', message => {
     if (message.member.id != "750667235684515872") {
 
         var startCommand = message.content.slice(0, 1)
-        if (startCommand === "!") {
+        if (startCommand === ">") {
             var userMessage = message.content;
             var commando = getFirstWord(userMessage).substring(1);
             if (commando === "penis") {
@@ -43,16 +43,16 @@ client.on('message', message => {
                     .setTitle('BucketBot Help Menu')
                     .setURL('https://www.youtube.com/c/blastbucketgaming/')
                     .setAuthor('BlastBucketGaming', 'https://yt3.ggpht.com/a-/AOh14Ggq46BGHZkdlJ0-7SbxWGD9j8hzapdBQQjS_v3hQA=s100-c-k-c0xffffffff-no-rj-mo', 'https://www.youtube.com/c/blastbucketgaming')
-                    .setDescription('Some description here')
+                    .setDescription('This is the BucketBot help menu. Here you will find all available commands. The bot only works if you see it online in the member list.')
                     .setThumbnail('https://static-cdn.jtvnw.net/jtv_user_pictures/8c77fe3b-7d7d-496b-8f97-5a6ae40c3047-profile_image-70x70.png')
                     // .addFields({ name: 'Regular field title', value: 'Some value here' }, { name: '\u200B', value: '\u200B' }, { name: 'Inline field title', value: 'Some value here', inline: true }, { name: 'Inline field title', value: 'Some value here', inline: true }, )
-                    .addField('Available commands:', '!help :arrow_right: Show this help menu \n \n !penis :arrow_right: Shows your penis length \n \n !callme :arrow_right: I will mention you in a message', true)
+                    .addField('Available commands:', '>help :arrow_right: Show this help menu \n \n >penis :arrow_right: Shows your penis length \n \n >callme :arrow_right: I will mention you in a message', true)
                     // .setImage('https://i.imgur.com/wSTFkRM.png')
                     .setTimestamp()
                     .setFooter('Made by BlastBucket Gaming', 'https://yt3.ggpht.com/a-/AOh14Ggq46BGHZkdlJ0-7SbxWGD9j8hzapdBQQjS_v3hQA=s100-c-k-c0xffffffff-no-rj-mo');
                 message.channel.send(exampleEmbed);
             } else {
-                message.channel.send("Unknown command, type !help to see the available commands")
+                message.channel.send("Unknown command, type >help to see the available commands")
             }
         }
     }
