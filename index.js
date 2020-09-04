@@ -2,7 +2,8 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 
 client.on("ready", () => {
-    client.user.setActivity(`Use >help`);
+    client.user.setActivity('>help', {type: "LISTENING"});
+    // client.user.setActivity('YouTube', { type: 'WATCHING' });
     console.log("Ready!")
 });
 
