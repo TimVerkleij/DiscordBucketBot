@@ -44,12 +44,11 @@ client.on('message', message => {
                 message.channel.send(message.member.displayName + " has a penis length of " + Math.floor(Math.random() * 10 + 1) + " inches.");
             } else if (commando === "play") {
                 if (args !== ">play") {
-                    if(voiceChannel){
+                    if (voiceChannel) {
                         play(voiceChannel, args, message)
                     } else {
                         message.channel.send("You don\'t seem to be in a voice channel")
                     }
-                    
                 } else {
                     message.channel.send("You didn\'t give me a song to play dummy")
                 }
