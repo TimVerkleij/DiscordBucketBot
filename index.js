@@ -3,32 +3,11 @@ const client = new Discord.Client();
 const ytdl = require('ytdl-core');
 
 var channelArray = [];
-// 719895908808130601 <== channel id of general chat in blastbucketgaming server
 client.on("ready", () => {
     client.user.setActivity('>help', { type: "LISTENING" });
     // console.log(client.channels.cache.toJSON()[3]);
     console.log("Ready!")
-        // play(client.channels.cache.get('296366910923210772')) //?connect to voice channel
 });
-
-
-
-
-async function play(voiceChannel, song, message) {
-    try {
-        const stream = ytdl(song, { filter: 'audioonly' });
-        const connection = await voiceChannel.join(); //?connect
-        const dispatcher = connection.play(stream)
-        dispatcher.on('finish', () => voiceChannel.leave());
-    } catch {
-        message.channel.send("Video not found. Better luck next time")
-    }
-}
-
-
-function stopMusic(voiceChannel) {
-    voiceChannel.leave()
-}
 
 client.on('message', message => {
     if (message.member.id != "750667235684515872") {
@@ -88,6 +67,25 @@ function getArgs(str) {
     let spaceIndex = str.indexOf(' ');
     return spaceIndex === -1 ? str : str.substr(spaceIndex).trim();
 }
+
+
+async function play(voiceChannel, song, message) {
+    try {
+        const stream = ytdl(song, { filter: 'audioonly' });
+        const connection = await voiceChannel.join(); //?connect
+        const dispatcher = connection.play(stream)
+        dispatcher.on('finish', () => voiceChannel.leave());
+    } catch {
+        message.channel.send("Video not found. Better luck next time")
+    }
+}
+
+
+function stopMusic(voiceChannel) {
+    voiceChannel.leave()
+}
+
+
 
 
 client.login('NzUwNjY3MjM1Njg0NTE1ODcy.X093Vw.e3UuaU6Uj8dHcc7MUXvVlDc_9cU');
