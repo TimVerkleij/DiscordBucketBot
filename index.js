@@ -15,7 +15,6 @@ client.on("ready", () => {
 
 client.on('message', message => {
     if (message.member.id != "750667235684515872") {
-        console.log(message.content)
         var startCommand = message.content.slice(0, 1)
         if (startCommand === ">") {
             const userMessage = message.content;
