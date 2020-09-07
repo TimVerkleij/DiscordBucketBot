@@ -54,7 +54,8 @@ client.on('message', message => {
                         { name: '`>fortune`', value: 'I\'m not a fortune teller but I can try :fortune_cookie:', inline: true },
                         { name: '`>callme`', value: 'Let the bot mention you in a message', inline: true },
                         { name: '`>fact`', value: 'I will tell you a random fact, and you\'re gonna believe it', inline: true },
-                        { name: '`>rlchat`', value: 'THIS IS ROCKET LEAGUE!!!', inline: true }
+                        { name: '`>rlchat`', value: 'THIS IS ROCKET LEAGUE!!!', inline: true },
+                        { name: '🍆', value: 'eggplant?', inline: true }
                     ])
                     .addField('Music commands:', '>play [youtube url] :arrow_right: I will play you a song in your voice channel\n \n >stop :arrow_right: stop playing music and leave the channel')
                     // .setImage('https://i.imgur.com/wSTFkRM.png')
