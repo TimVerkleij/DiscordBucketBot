@@ -15,7 +15,7 @@ client.on("ready", () => {
 
 client.on('message', message => {
     if (message.member.id != "750667235684515872") {
-
+        console.log(message.content)
         var startCommand = message.content.slice(0, 1)
         if (startCommand === ">") {
             const userMessage = message.content;
@@ -47,7 +47,15 @@ client.on('message', message => {
                     .setDescription('This is the BucketBot help menu. Here you will find all available commands. The bot only works if you see it online in the member list.')
                     .setThumbnail('https://static-cdn.jtvnw.net/jtv_user_pictures/8c77fe3b-7d7d-496b-8f97-5a6ae40c3047-profile_image-70x70.png')
                     // .addFields({ name: 'Regular field title', value: 'Some value here' }, { name: '\u200B', value: '\u200B' }, { name: 'Inline field title', value: 'Some value here', inline: true }, { name: 'Inline field title', value: 'Some value here', inline: true }, )
-                    .addField('General commands:', '>help :arrow_right: Show this help menu \n \n >penis :arrow_right: Shows your penis length \n \n >callme :arrow_right: I will mention you in a message \n \n >fortune :arrow_right: I\'m not a fortune teller but I can try.', true)
+                    // .addField('General commands:', ' `>help` Show this help menu \n \n >penis :arrow_right: Shows your penis length \n \n >callme :arrow_right: I will mention you in a message \n \n >fortune :arrow_right: I\'m not a fortune teller but I can try. \n \n >fact :arrow_right: I will tell you a random fact, and you will believe it. \n \n >rlchat :arrow_right: Send a random rocket leage quickchat', true)
+                    .addFields([
+                        { name: '`>help`', value: 'Shows this help menu', inline: true },
+                        { name: '`>penis`', value: 'Shows your penis length', inline: true },
+                        { name: '`>fortune`', value: 'I\'m not a fortune teller but I can try :fortune_cookie:', inline: true },
+                        { name: '`>callme`', value: 'Let the bot mention you in a message', inline: true },
+                        { name: '`>fact`', value: 'I will tell you a random fact, and you\'re gonna believe it', inline: true },
+                        { name: '`>rlchat`', value: 'THIS IS ROCKET LEAGUE!!!', inline: true }
+                    ])
                     .addField('Music commands:', '>play [youtube url] :arrow_right: I will play you a song in your voice channel\n \n >stop :arrow_right: stop playing music and leave the channel')
                     // .setImage('https://i.imgur.com/wSTFkRM.png')
                     .setTimestamp()
@@ -74,6 +82,10 @@ client.on('message', message => {
             } else {
                 message.channel.send("Unknown command, type >help to see the available commands")
             }
+        }
+        if (message.content === "🍆") {
+            message.react("🤏")
+            message.react("🍆")
         }
     }
 });
