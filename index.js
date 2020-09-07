@@ -1,6 +1,8 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
 const ytdl = require('ytdl-core');
+var NoSQL = require('nosql');
+var db = NoSQL.load('./local.db.nosql');
 
 var channelArray = [];
 client.on("ready", () => {
@@ -50,6 +52,12 @@ client.on('message', message => {
                     .setTimestamp()
                     .setFooter('Made by BlastBucket Gaming', 'https://yt3.ggpht.com/a-/AOh14Ggq46BGHZkdlJ0-7SbxWGD9j8hzapdBQQjS_v3hQA=s100-c-k-c0xffffffff-no-rj-mo');
                 message.channel.send(exampleEmbed);
+            } else if (commando === "fortune") {
+                db.find().make(function(filter) {
+                    filter.callback(function(err, response) {
+                        message.channel.send(response[Math.floor(Math.random() * response.length)])
+                    });
+                });
             } else {
                 message.channel.send("Unknown command, type >help to see the available commands")
             }
