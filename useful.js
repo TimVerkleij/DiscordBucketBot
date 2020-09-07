@@ -49,3 +49,10 @@ async function play(voiceChannel, song, message) {
         message.channel.send("Video not found. Better luck next time")
     }
 }
+
+
+db.find().make(function(filter) {
+    filter.callback(function(err, response) {
+        console.log(response[2])
+    });
+});
