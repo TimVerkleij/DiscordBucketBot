@@ -14,7 +14,10 @@ client.on("ready", () => {
 });
 
 client.on('message', message => {
-    if (message.member.id != "750667235684515872") {
+    if (message.toJSON().authorID != "750667235684515872") {
+        if (message.content.includes("<@!750667235684515872>")) {
+            message.member.send("Don\'t @ me bruh")
+        }
         var startCommand = message.content.slice(0, 1)
         if (startCommand === ">") {
             const userMessage = message.content;
@@ -64,7 +67,7 @@ client.on('message', message => {
             } else if (commando === "fortune") {
                 fortuneDB.find().make(function(filter) {
                     filter.callback(function(err, response) {
-                        message.channel.send(response[Math.floor(Math.random() * response.length)])
+                        message.channel.send(':fortune_cookie:' + response[Math.floor(Math.random() * response.length)])
                     });
                 });
             } else if (commando === "fact") {
