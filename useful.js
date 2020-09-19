@@ -56,3 +56,10 @@ db.find().make(function(filter) {
         console.log(response[2])
     });
 });
+
+
+//? useful links:
+//* array.every() function 
+//! https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/every
+//* cheat sheet listeners
+//! https://gist.github.com/koad/316b265a91d933fd1b62dddfcc3ff584
