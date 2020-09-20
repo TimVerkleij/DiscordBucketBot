@@ -31,11 +31,11 @@ client.on('message', message => {
     if (message.guild.id === "379480837332271105") {
         const hasSub = message.member.roles.cache.has("616806136674385960")
         if (hasSub) {
-            newMember.roles.add("489629999427485717")
+            message.member.roles.add("489629999427485717")
         } else {
             // newMember.roles.remove("756159932998615222")
             try {
-                newMember.roles.remove("489629999427485717")
+                message.member.roles.remove("489629999427485717")
             } catch {
                 console.log("Could not remove their role")
             }
@@ -103,7 +103,8 @@ client.on('message', message => {
                     { name: '`>callme`', value: 'Let the bot mention you in a message', inline: true },
                     { name: '`>fact`', value: 'I will tell you a random fact, and you\'re gonna believe it', inline: true },
                     { name: '`>rlchat`', value: 'THIS IS ROCKET LEAGUE!!!', inline: true },
-                    { name: '🍆', value: 'eggplant?', inline: true }
+                    { name: '`>tictactoe`', value: 'Play a game of tic tac toe against a friend!', inline: true }
+                    // { name: '\n🍆', value: 'eggplant?', inline: true }
                 ])
                 .addField('Music commands:', '>play [youtube url] :arrow_right: I will play you a song in your voice channel\n \n >stop :arrow_right: stop playing music and leave the channel')
                 // .setImage('https://i.imgur.com/wSTFkRM.png')
@@ -123,8 +124,6 @@ client.on('message', message => {
                 });
             });
         } else if (commando === "tictactoe") {
-            message.channel.send("Our amazing developer is working hard on this command, please be patient while we are trying to get rid of any bugs")
-        } else if (commando === "tictactoenails") {
             var a1 = b1 = c1 = a2 = b2 = c2 = a3 = b3 = c3 = ':black_large_square:'
 
             var array = [
@@ -137,10 +136,10 @@ client.on('message', message => {
             if (args.startsWith('<@') && args.endsWith('>') && !args.includes(' ')) {
                 var mentionedUser = getUserDataFromMention(args) //gets id from person who was challenged
                 var mainUser = message.author //gets id from the challenger
-                    // if (mentionedUser === mainUser) {
-                    //     message.channel.send("LMFAO You can't play with yourself idiot.")
-                    //     return
-                    // }
+                if (mentionedUser === mainUser) {
+                    message.channel.send("LMFAO You can't play with yourself idiot.")
+                    return
+                }
                 if (mentionedUser === client.user) {
                     message.channel.send("Did you really think I was gonna play a game with you? LOLLLLL. Nobody wants to fucking play with you. :rofl: ")
                     return
@@ -236,8 +235,6 @@ function getUserDataFromMention(mention) {
 }
 
 function nextMove(message, array, mainUser, mentionedUser) {
-
-
     if ((message.content.startsWith('a') || message.content.startsWith('b') || message.content.startsWith('c')) && (message.content.endsWith('1') || message.content.endsWith('2') || message.content.endsWith('3')) && message.content.length == 2) {
 
         var input = message.content
@@ -251,33 +248,49 @@ function nextMove(message, array, mainUser, mentionedUser) {
             letter = 3
         }
         var number = parseInt(input.charAt(1))
-
         if (array[letter][number] === ":black_large_square:") {
             if (message.author == mainUser) {
                 array[letter][number] = ":o:"
                 let gameEnd = checkGameEnd(array, message)
-                if (!gameEnd) {
-                    message.channel.send("It\'s your turn now! <@" + mentionedUser.id + ">")
-                    const collector2 = new Discord.MessageCollector(message.channel, m => m.author.id === mentionedUser.id, { time: 10000 });
-                    collector2.on('collect', message => {
-                        nextMove(message, array, mainUser, mentionedUser);
-                        collector2.stop()
-                        var nextUser = mentionedUser
-                    })
+                let gameWon = checkWin(array, message)
+                if (gameWon) {
+                    message.channel.send(`${mainUser} won the game!`)
+                    return
+                } else {
+                    if (!gameEnd) {
+                        message.channel.send("It\'s your turn now! <@" + mentionedUser.id + ">")
+                        const collector2 = new Discord.MessageCollector(message.channel, m => m.author.id === mentionedUser.id, { time: 10000 });
+                        collector2.on('collect', message => {
+                            nextMove(message, array, mainUser, mentionedUser);
+                            // var nextUser = mentionedUser
+
+                            collector2.stop()
+                        })
+                    }
                 }
+
+
 
             } else {
                 array[letter][number] = ":x:"
                 let gameEnd = checkGameEnd(array, message)
-                if (!gameEnd) {
-                    message.channel.send("It\'s your turn now! <@" + mainUser.id + ">")
-                    const collector2 = new Discord.MessageCollector(message.channel, m => m.author.id === mainUser.id, { time: 10000 });
-                    collector2.on('collect', message => {
-                        nextMove(message, array, mainUser, mentionedUser);
-                        collector2.stop()
-                        var nextUser = mainUser
-                    })
+                let gameWon = checkWin(array, message)
+                if (gameWon) {
+                    message.channel.send(`${mentionedUser} won the game!`)
+                    return
+                } else {
+                    if (!gameEnd) {
+                        message.channel.send("It\'s your turn now! <@" + mainUser.id + ">")
+                        const collector2 = new Discord.MessageCollector(message.channel, m => m.author.id === mainUser.id, { time: 10000 });
+                        collector2.on('collect', message => {
+                            nextMove(message, array, mainUser, mentionedUser);
+                            // var nextUser = mainUser
+
+                            collector2.stop()
+                        })
+                    }
                 }
+
 
             }
         } else {
@@ -298,13 +311,11 @@ function nextMove(message, array, mainUser, mentionedUser) {
         }
 
 
-
-
         const exampleEmbed = new Discord.MessageEmbed()
             .setColor('#0000ff')
             // .setTitle('Tic Tac Toe')
             // .addField(array[1][1] + ' ' + array[1][2] + ' ' + array[1][3], array[2][1] + ' ' + array[2][2] + ' ' + array[2][3] + '\n' + array[3][1] + ' ' + array[3][2] + ' ' + array[3][3])
-            .addField(`${array[1][1]} ${array[1][2]} ${array[1][3]}\n${array[2][1]} ${array[2][2]} ${array[2][3]}\n${array[3][1]} ${array[3][2]} ${array[3][3]}`, `${nextUser}'s turn`)
+            .addField(`${array[1][1]} ${array[1][2]} ${array[1][3]}\n${array[2][1]} ${array[2][2]} ${array[2][3]}\n${array[3][1]} ${array[3][2]} ${array[3][3]}`, `Next turn!`)
 
         message.channel.send(exampleEmbed);
     } else {
@@ -329,6 +340,35 @@ function nextMove(message, array, mainUser, mentionedUser) {
 }
 
 
+function checkWin(array) {
+
+    const winningConditions = [
+        [array[1][1], array[1][2], array[1][3]],
+        [array[2][1], array[2][2], array[2][3]],
+        [array[3][1], array[3][2], array[3][3]],
+        [array[1][1], array[2][1], array[3][1]],
+        [array[1][2], array[2][2], array[3][2]],
+        [array[1][3], array[2][3], array[3][3]],
+        [array[1][1], array[2][2], array[3][3]],
+        [array[1][3], array[2][2], array[3][1]]
+    ]
+
+    let roundWon = false;
+    for (let i = 0; i <= 7; i++) {
+        let winCondition = winningConditions[i]
+        let a = winCondition[0]
+        let b = winCondition[1]
+        let c = winCondition[2]
+        let failSafe = [a, b, c]
+        if ((a === b && b === c) && !failSafe.includes(":black_large_square:")) {
+            roundWon = true
+        }
+    }
+    return roundWon
+
+}
+
+
 function checkFields(array, emptySpaces) {
     for (let i = 0; i < array.length; i++) {
         const value = array[i];
@@ -342,7 +382,7 @@ function checkFields(array, emptySpaces) {
 }
 
 function checkGameEnd(array, message) {
-    var gameEnd = false
+    let gameEnd = false
     var emptySpaces = 0
     if (checkFields(array, emptySpaces) === 0) {
         message.channel.send("game over")
@@ -373,6 +413,42 @@ async function play(voiceChannel, song, message) {
 function stopMusic(voiceChannel) {
     voiceChannel.leave()
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
