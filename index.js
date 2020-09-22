@@ -180,7 +180,12 @@ client.on('message', message => {
                     message.channel.send(response[Math.floor(Math.random() * response.length)])
                 });
             });
-        } else {
+        } else if (commando === "bruh") {
+            message.channel.send("Testing message.", { files: ["./files/bruh.mp3"] });
+        }
+        
+        
+        else {
             message.channel.send("Unknown command, type >help to see the available commands")
         }
     }
@@ -416,5 +421,5 @@ function stopMusic(voiceChannel) {
 }
 
 
-client.login(process.env.token);
-// client.login('NzUwNjY3MjM1Njg0NTE1ODcy.X093Vw.e3UuaU6Uj8dHcc7MUXvVlDc_9cU');
+// client.login(process.env.token);
+client.login('NzUwNjY3MjM1Njg0NTE1ODcy.X093Vw.e3UuaU6Uj8dHcc7MUXvVlDc_9cU');
