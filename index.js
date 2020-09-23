@@ -104,6 +104,7 @@ client.on('message', message => {
                     { name: '`>callme`', value: 'Let the bot mention you in a message', inline: true },
                     { name: '`>fact`', value: 'I will tell you a random fact, and you\'re gonna believe it', inline: true },
                     { name: '`>rlchat`', value: 'THIS IS ROCKET LEAGUE!!!', inline: true },
+                    { name: '`>bruh`', value: 'Bruh.', inline: true },
                     { name: '`>tictactoe`', value: 'Play a game of tic tac toe against a friend!', inline: true }
                     // { name: '\n🍆', value: 'eggplant?', inline: true }
                 ])
@@ -181,11 +182,8 @@ client.on('message', message => {
                 });
             });
         } else if (commando === "bruh") {
-            message.channel.send("Testing message.", { files: ["./files/bruh.mp3"] });
-        }
-        
-        
-        else {
+            message.channel.send("Bruh.", { files: ["./files/bruh.mp3"] });
+        } else {
             message.channel.send("Unknown command, type >help to see the available commands")
         }
     }
