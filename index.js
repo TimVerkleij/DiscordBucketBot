@@ -29,6 +29,23 @@ client.on("ready", () => {
 
 client.on('message', message => {
 
+    if (message.guild === null && !message.author.bot) {
+
+        const d = new Date(message.createdTimestamp);
+        date = d.toLocaleTimeString() + " " + d.toDateString()
+
+        DMDB.insert({
+            user: message.author.username,
+            message: message.content,
+            date: date
+        })
+
+
+        console.log(`${message.author.username} tried to send a DM:\n${d.toLocaleTimeString()}: ${message.content}`)
+            // message.channel.send("Don't DM me, I don't like that :slight_frown:")
+        return
+    }
+
     if (message.guild.id === "379480837332271105") {
         const hasSub = message.member.roles.cache.has("616806136674385960")
         if (hasSub) {
@@ -49,22 +66,7 @@ client.on('message', message => {
         message.member.send("Don\'t @ me bruh")
     }
 
-    if (message.guild === null && !message.author.bot) {
-
-        const d = new Date(message.createdTimestamp);
-        date = d.toLocaleTimeString() + " " + d.toDateString()
-
-        DMDB.insert({
-            user: message.author.username,
-            message: message.content,
-            date: date
-        })
-
-
-        console.log(`${message.author.username} tried to send a DM:\n${d.toLocaleTimeString()}: ${message.content}`)
-            // message.channel.send("Don't DM me, I don't like that :slight_frown:")
-        return
-    }
+    
 
     if (message.content.startsWith(">") && !message.author.bot) {
         const userMessage = message.content;
