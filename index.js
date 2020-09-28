@@ -46,27 +46,30 @@ client.on('message', message => {
         return
     }
 
-    if (message.guild.id === "379480837332271105") {
-        const hasSub = message.member.roles.cache.has("616806136674385960")
-        if (hasSub) {
-            message.member.roles.add("489629999427485717")
-        } else {
-            // newMember.roles.remove("756159932998615222")
-            try {
-                message.member.roles.remove("489629999427485717")
-            } catch {
-                console.log("Could not remove their role")
-            }
+    if (message.guild !== null) {
+        if (message.guild.id === "379480837332271105") {
+            const hasSub = message.member.roles.cache.has("616806136674385960")
+            if (hasSub) {
+                message.member.roles.add("489629999427485717")
+            } else {
+                // newMember.roles.remove("756159932998615222")
+                try {
+                    message.member.roles.remove("489629999427485717")
+                } catch {
+                    console.log("Could not remove their role")
+                }
 
+            }
         }
     }
+
 
 
     if (message.content.includes("<@!750667235684515872>")) {
         message.member.send("Don\'t @ me bruh")
     }
 
-    
+
 
     if (message.content.startsWith(">") && !message.author.bot) {
         const userMessage = message.content;
@@ -265,7 +268,7 @@ function nextMove(message, array, mainUser, mentionedUser) {
                 } else {
                     if (!gameEnd) {
                         message.channel.send("It\'s your turn now! <@" + mentionedUser.id + ">")
-                        const collector2 = new Discord.MessageCollector(message.channel, m => m.author.id === mentionedUser.id, { time: 10000 });
+                        const collector2 = new Discord.MessageCollector(message.channel, m => m.author.id === mentionedUser.id, { time: 20000 });
                         collector2.on('collect', message => {
                             nextMove(message, array, mainUser, mentionedUser);
                             // var nextUser = mentionedUser
@@ -287,7 +290,7 @@ function nextMove(message, array, mainUser, mentionedUser) {
                 } else {
                     if (!gameEnd) {
                         message.channel.send("It\'s your turn now! <@" + mainUser.id + ">")
-                        const collector2 = new Discord.MessageCollector(message.channel, m => m.author.id === mainUser.id, { time: 10000 });
+                        const collector2 = new Discord.MessageCollector(message.channel, m => m.author.id === mainUser.id, { time: 20000 });
                         collector2.on('collect', message => {
                             nextMove(message, array, mainUser, mentionedUser);
                             // var nextUser = mainUser
@@ -302,13 +305,13 @@ function nextMove(message, array, mainUser, mentionedUser) {
         } else {
             message.channel.send("Are you blind? That spot is not available dumbass. Try a different spot.")
             if (message.author == mainUser) {
-                const collector2 = new Discord.MessageCollector(message.channel, m => m.author.id === mainUser.id, { time: 10000 });
+                const collector2 = new Discord.MessageCollector(message.channel, m => m.author.id === mainUser.id, { time: 20000 });
                 collector2.on('collect', message => {
                     nextMove(message, array, mainUser, mentionedUser);
                     collector2.stop();
                 })
             } else {
-                const collector2 = new Discord.MessageCollector(message.channel, m => m.author.id === mentionedUser.id, { time: 10000 });
+                const collector2 = new Discord.MessageCollector(message.channel, m => m.author.id === mentionedUser.id, { time: 20000 });
                 collector2.on('collect', message => {
                     nextMove(message, array, mainUser, mentionedUser);
                     collector2.stop()
@@ -327,13 +330,13 @@ function nextMove(message, array, mainUser, mentionedUser) {
     } else {
         message.channel.send("That\'s not how you play this game lmfao, try doing it right next time")
         if (message.author == mainUser) {
-            const collector2 = new Discord.MessageCollector(message.channel, m => m.author.id === mainUser.id, { time: 10000 });
+            const collector2 = new Discord.MessageCollector(message.channel, m => m.author.id === mainUser.id, { time: 20000 });
             collector2.on('collect', message => {
                 nextMove(message, array, mainUser, mentionedUser);
                 collector2.stop();
             })
         } else {
-            const collector2 = new Discord.MessageCollector(message.channel, m => m.author.id === mentionedUser.id, { time: 10000 });
+            const collector2 = new Discord.MessageCollector(message.channel, m => m.author.id === mentionedUser.id, { time: 20000 });
             collector2.on('collect', message => {
                 nextMove(message, array, mainUser, mentionedUser);
                 collector2.stop()
