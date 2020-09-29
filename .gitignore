@@ -1,4 +1,4 @@
-local.*
+local.secret
 useful.*
 
 # Logs
