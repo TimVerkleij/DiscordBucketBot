@@ -18,6 +18,7 @@
   "homepage": "https://github.com/TimVerkleij/DiscordBucketBot#readme",
   "dependencies": {
     "@discordjs/opus": "^0.3.2",
+    "cron": "^1.8.2",
     "discord.js": "^12.3.1",
     "ffmpeg-static": "^4.2.7",
     "nosql": "^6.1.0",
