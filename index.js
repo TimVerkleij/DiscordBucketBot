@@ -178,6 +178,10 @@ client.on('message', message => {
                     name: '`>tictactoe`',
                     value: 'Play a game of tic tac toe against a friend!',
                     inline: true
+                }, {
+                    name: '`>coinflip`',
+                    value: 'You won\'t win',
+                    inline: true
                 }
                 // { name: '\n🍆', value: 'eggplant?', inline: true }
             ]).addField('Music commands:', '>play [youtube url] :arrow_right: I will play you a song in your voice channel\n \n >stop :arrow_right: stop playing music and leave the channel')
@@ -256,6 +260,19 @@ client.on('message', message => {
             });
         } else if (commando === "bruh") {
             message.channel.send("Bruh.", {files: ["./files/bruh.mp3"]});
+        } else if (commando === "coinflip") {
+            message.channel.send("Say `heads` or `tails` :smirk:")
+            const collector = new Discord.MessageCollector(message.channel, m => m.author.id === message.member.id, {time: 20000});
+            collector.on('collect', message => {
+                if (message.content.includes("tails") || message.content.includes("Tails")) {
+                    message.channel.send("You chose tails, it landed on heads, you lose :slight_smile:")
+                } else if (message.content.includes("heads") || message.content.includes("Heads")) {
+                    message.channel.send("You chose heads, it landed on tails, you lose :slight_smile:")
+                } else {
+                    message.channel.send("Please say `heads` or `tails`")
+                }
+                collector.stop()
+            })
         } else {
             message.channel.send("Unknown command, type >help to see the available commands")
         }
