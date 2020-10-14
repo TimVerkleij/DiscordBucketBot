@@ -178,6 +178,10 @@ client.on('message', message => {
                     name: '`>tictactoe`',
                     value: 'Play a game of tic tac toe against a friend!',
                     inline: true
+                }, {
+                    name: '`>coinflip`',
+                    value: 'You won\'t win',
+                    inline: true
                 }
                 // { name: '\n🍆', value: 'eggplant?', inline: true }
             ]).addField('Music commands:', '>play [youtube url] :arrow_right: I will play you a song in your voice channel\n \n >stop :arrow_right: stop playing music and leave the channel')
