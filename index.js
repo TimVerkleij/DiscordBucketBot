@@ -262,15 +262,23 @@ client.on('message', message => {
             message.channel.send("Bruh.", {files: ["./files/bruh.mp3"]});
         } else if (commando === "coinflip") {
             message.channel.send("Say `heads` or `tails` :smirk:")
+            let randomNumber = Math.random()
             const collector = new Discord.MessageCollector(message.channel, m => m.author.id === message.member.id, {time: 20000});
             collector.on('collect', message => {
                 if (message.content.includes("tails") || message.content.includes("Tails")) {
-                    message.channel.send("You chose tails, it landed on heads, you lose :slight_smile:")
+                    if (randomNumber > 0.5) {
+                        message.channel.send("You chose tails, it landed on heads, you lose :slight_smile:")
+                    } else {
+                        message.channel.send("You chose tails, it landed on tails, you win :smile:")
+                    }
                 } else if (message.content.includes("heads") || message.content.includes("Heads")) {
-                    message.channel.send("You chose heads, it landed on tails, you lose :slight_smile:")
-                } else {
-                    message.channel.send("Please say `heads` or `tails`")
+                    if (randomNumber < 0.5) {
+                        message.channel.send("You chose heads, it landed on heads, you win :smile:")
+                    } else {
+                        message.channel.send("You chose heads, it landed on tails, you lose :slight_smile:")
+                    }
                 }
+
                 collector.stop()
             })
         } else {
