@@ -12,45 +12,45 @@ var DMDB = NoSQL.load('./local.directMessages.nosql')
 var channelArray = [];
 client.on("ready", () => {
     client.user.setActivity('>help', {type: "LISTENING"});
-    // console.log(client.channels.cache.toJSON()[3]);
+        // console.log(client.channels.cache.toJSON()[3]);
 
-    // const guild = client.guilds.cache.get("379480837332271105")
-    // var userCount = guild.memberCount;
-    // var onlineCount = guild.presences.cache
-    // onlineCount.forEach(user => {
-    //     const onlineMembers = user.guild.presences.cache
-    //     onlineMembers.forEach(onlineMember =>{
-    //         console.log(client.users.cache.get(onlineMember.userID))
-    //     })
-    // });
-
-
-    console.log("Ready!")
+        // const guild = client.guilds.cache.get("379480837332271105")
+        // var userCount = guild.memberCount;
+        // var onlineCount = guild.presences.cache
+        // onlineCount.forEach(user => {
+        //     const onlineMembers = user.guild.presences.cache
+        //     onlineMembers.forEach(onlineMember =>{
+        //         console.log(client.users.cache.get(onlineMember.userID))
+        //     })
+        // });
 
 
-    let getMembers = function () {
-        let mrPoopGuild = client.guilds.cache.get("379480837332271105")
-        return mrPoopGuild.members.fetch().then(members => {
-            return members
-        })
-    }
+        console.log("Ready!")
 
-    let allMembers = getMembers()
 
-    allMembers.then(function (result) {
-        result.forEach((member) => {
-            const hasSub = member.roles.cache.has("616806136674385960")
-            const hasGreenSub = member.roles.cache.has("489629999427485717")
-            if (hasSub && ! hasGreenSub) {
-                member.roles.add("489629999427485717")
-            } else if (! hasSub && hasGreenSub) {
-                member.roles.remove("489629999427485717")
+        try {
+            let getMembers = function () {
+                let mrPoopGuild = client.guilds.cache.get("379480837332271105")
+                return mrPoopGuild.members.fetch().then(members => {
+                    return members
+                })
             }
-        })
-    })
 
-});
+            let allMembers = getMembers()
 
+            allMembers.then(function (result) {
+                result.forEach((member) => {
+                    const hasSub = member.roles.cache.has("616806136674385960")
+                    const hasGreenSub = member.roles.cache.has("489629999427485717")
+                    if (hasSub && ! hasGreenSub) {
+                        member.roles.add("489629999427485717")
+                    } else if (! hasSub && hasGreenSub) {
+                        member.roles.remove("489629999427485717")
+                    }
+                })
+            })
+        } catch {console.log("Something went wrong")}}
+);
 
 let scheduledMessage = new cron.CronJob('00 00 15 * * *', () => {
     console.log("Updating roles...")
@@ -515,11 +515,6 @@ function checkFields(array, emptySpaces) {
             const item = value[j];
             if (item === ":black_large_square:") 
                 emptySpaces++
-
-
-            
-
-
         }
     }
     return emptySpaces
@@ -554,5 +549,5 @@ function stopMusic(voiceChannel) {
     voiceChannel.leave()
 }
 
-client.login(process.env.BOT_TOKEN);
-// client.login('NzUwNjY3MjM1Njg0NTE1ODcy.X093Vw.e3UuaU6Uj8dHcc7MUXvVlDc_9cU');
+// client.login(process.env.BOT_TOKEN);
+client.login('NzUwNjY3MjM1Njg0NTE1ODcy.X093Vw.e3UuaU6Uj8dHcc7MUXvVlDc_9cU');
