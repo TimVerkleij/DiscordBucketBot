@@ -515,11 +515,6 @@ function checkFields(array, emptySpaces) {
             const item = value[j];
             if (item === ":black_large_square:") 
                 emptySpaces++
-
-
-            
-
-
         }
     }
     return emptySpaces
