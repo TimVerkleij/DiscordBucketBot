@@ -119,6 +119,8 @@ client.on('message', message => {
         message.member.send("Don\'t @ me bruh")
     }
 
+    let newMessage = message.content.toLowerCase()
+
 
     if (message.content.startsWith(">") && !message.author.bot) {
         const userMessage = message.content;
@@ -284,10 +286,11 @@ client.on('message', message => {
         } else {
             message.channel.send("Unknown command, type >help to see the available commands")
         }
-    }
-    if (message.content === "🍆") {
+    }else if (message.content === "🍆") {
         message.react("🤏")
         message.react("🍆")
+    } else if (newMessage.startsWith("rl.rank")) {
+        message.channel.send(`Wrong channel ${message.author} \nGo to <#786661753462980690>`)
     }
 
 });
