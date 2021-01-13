@@ -283,7 +283,10 @@ client.on('message', message => {
 
                 collector.stop()
             })
-        } else {
+        } else if (commando === "members"){
+            message.channel.send(`This awesome Discord server has ${message.guild.memberCount} members!`)
+        }
+         else {
             message.channel.send("Unknown command, type >help to see the available commands")
         }
     }else if (message.content === "🍆") {
@@ -552,4 +555,5 @@ function stopMusic(voiceChannel) {
     voiceChannel.leave()
 }
 
-client.login(process.env.BOT_TOKEN);
+// client.login(process.env.BOT_TOKEN);
+client.login('NzUwNjY3MjM1Njg0NTE1ODcy.X093Vw.SQgRdHSq_rc1ovJ0TH4orf2o0vs');
