@@ -555,5 +555,4 @@ function stopMusic(voiceChannel) {
     voiceChannel.leave()
 }
 
-// client.login(process.env.BOT_TOKEN);
-client.login('NzUwNjY3MjM1Njg0NTE1ODcy.X093Vw.SQgRdHSq_rc1ovJ0TH4orf2o0vs');
+client.login(process.env.BOT_TOKEN);
