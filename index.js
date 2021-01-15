@@ -9,37 +9,29 @@ var factsDB = NoSQL.load('./local.facts.nosql');
 var quickchatsDB = NoSQL.load('./local.quickchats.nosql');
 var DMDB = NoSQL.load('./local.directMessages.nosql')
 
-var channelArray = [];
 client.on("ready", () => {
     client.user.setActivity('>help', {type: "LISTENING"});
-        // console.log(client.channels.cache.toJSON()[3]);
-
-        // const guild = client.guilds.cache.get("379480837332271105")
-        // var userCount = guild.memberCount;
-        // var onlineCount = guild.presences.cache
-        // onlineCount.forEach(user => {
-        //     const onlineMembers = user.guild.presences.cache
-        //     onlineMembers.forEach(onlineMember =>{
-        //         console.log(client.users.cache.get(onlineMember.userID))
-        //     })
-        // });
-
 
         console.log("Ready!")
 
-
         try {
+
             let getMembers = function () {
+
                 let mrPoopGuild = client.guilds.cache.get("379480837332271105")
                 return mrPoopGuild.members.fetch().then(members => {
                     return members
                 })
+
             }
+
 
             let allMembers = getMembers()
 
             allMembers.then(function (result) {
+
                 result.forEach((member) => {
+
                     const hasSub = member.roles.cache.has("616806136674385960")
                     const hasGreenSub = member.roles.cache.has("489629999427485717")
                     if (hasSub && ! hasGreenSub) {
@@ -53,12 +45,16 @@ client.on("ready", () => {
 );
 
 let scheduledMessage = new cron.CronJob('00 00 15 * * *', () => {
+
     console.log("Updating roles...")
+
     let getMembers = function () {
+
         let mrPoopGuild = client.guilds.cache.get("379480837332271105")
         return mrPoopGuild.members.fetch().then(members => {
             return members
         })
+
     }
 
     let allMembers = getMembers()
@@ -67,6 +63,7 @@ let scheduledMessage = new cron.CronJob('00 00 15 * * *', () => {
         console.log(result.size)
 
         result.forEach((member) => {
+
             const hasSub = member.roles.cache.has("616806136674385960")
             const hasGreenSub = member.roles.cache.has("489629999427485717")
             if (hasSub && ! hasGreenSub) {
@@ -98,7 +95,6 @@ client.on('message', message => {
         }: ${
             message.content
         }`)
-        // message.channel.send("Don't DM me, I don't like that :slight_frown:")
         return
     }
 
@@ -120,7 +116,6 @@ client.on('message', message => {
     }
 
     let newMessage = message.content.toLowerCase()
-
 
     if (message.content.startsWith(">") && !message.author.bot) {
         const userMessage = message.content;
@@ -144,7 +139,7 @@ client.on('message', message => {
         } else if (commando === "callme") {
             message.channel.send("<@" + message.member.id + ">")
         } else if (commando === "help") {
-            const exampleEmbed = new Discord.MessageEmbed().setColor('#00ff00').setTitle('BucketBot Help Menu').setURL('https://www.youtube.com/c/blastbucketgaming/').setAuthor('BlastBucketGaming', 'https://yt3.ggpht.com/a-/AOh14Ggq46BGHZkdlJ0-7SbxWGD9j8hzapdBQQjS_v3hQA=s100-c-k-c0xffffffff-no-rj-mo', 'https://www.youtube.com/c/blastbucketgaming').setDescription('This is the BucketBot help menu. Here you will find all available commands. The bot only works if you see it online in the member list.').setThumbnail('https://static-cdn.jtvnw.net/jtv_user_pictures/8c77fe3b-7d7d-496b-8f97-5a6ae40c3047-profile_image-70x70.png').addFields([
+            const helpMenu = new Discord.MessageEmbed().setColor('#00ff00').setTitle('BucketBot Help Menu').setURL('https://www.youtube.com/c/blastbucketgaming/').setAuthor('BlastBucketGaming', 'https://yt3.ggpht.com/a-/AOh14Ggq46BGHZkdlJ0-7SbxWGD9j8hzapdBQQjS_v3hQA=s100-c-k-c0xffffffff-no-rj-mo', 'https://www.youtube.com/c/blastbucketgaming').setDescription('This is the BucketBot help menu. Here you will find all available commands. The bot only works if you see it online in the member list.').setThumbnail('https://static-cdn.jtvnw.net/jtv_user_pictures/8c77fe3b-7d7d-496b-8f97-5a6ae40c3047-profile_image-70x70.png').addFields([
                 {
                     name: '`>help`',
                     value: 'Shows this help menu',
@@ -184,11 +179,13 @@ client.on('message', message => {
                     name: '`>coinflip`',
                     value: 'You won\'t win',
                     inline: true
+                }, {
+                    name: '`>members`',
+                    value: 'Check how many people are in this server',
+                    inline: true
                 }
-                // { name: '\n🍆', value: 'eggplant?', inline: true }
             ]).addField('Music commands:', '>play [youtube url] :arrow_right: I will play you a song in your voice channel\n \n >stop :arrow_right: stop playing music and leave the channel')
-            // .setImage('https://i.imgur.com/wSTFkRM.png').setTimestamp().setFooter('Made by BlastBucket Gaming', 'https://yt3.ggpht.com/a-/AOh14Ggq46BGHZkdlJ0-7SbxWGD9j8hzapdBQQjS_v3hQA=s100-c-k-c0xffffffff-no-rj-mo');
-            message.channel.send(exampleEmbed);
+            message.channel.send(helpMenu);
         } else if (commando === "fortune") {
             fortuneDB.find().make(function (filter) {
                 filter.callback(function (err, response) {
@@ -202,6 +199,8 @@ client.on('message', message => {
                 });
             });
         } else if (commando === "tictactoe") {
+
+            //creates a 3x3 player field full of the black large square emotes
             var a1 = b1 = c1 = a2 = b2 = c2 = a3 = b3 = c3 = ':black_large_square:'
 
             var array = [
@@ -220,6 +219,9 @@ client.on('message', message => {
             if (args.startsWith('<@') && args.endsWith('>') && ! args.includes(' ')) {
                 var mentionedUser = getUserDataFromMention(args) // gets id from person who was challenged
                 var mainUser = message.author // gets id from the challenger
+
+                //Checks if the challenged user is valid
+                //Bot will give savage/funny responses if invalid user was given
                 if (mentionedUser === mainUser) {
                     message.channel.send("LMFAO You can't play with yourself idiot.")
                     return
@@ -233,13 +235,14 @@ client.on('message', message => {
                     return
                 }
 
-                const exampleEmbed = new Discord.MessageEmbed().setColor('#0000ff').setTitle('Tic Tac Toe').addField(array[1][1] + ' ' + array[1][2] + ' ' + array[1][3] + '\n' + array[2][1] + ' ' + array[2][2] + ' ' + array[2][3] + '\n' + array[3][1] + ' ' + array[3][2] + ' ' + array[3][3], `${mentionedUser}'s turn`)
+                const playingFieldEmbed = new Discord.MessageEmbed().setColor('#0000ff').setTitle('Tic Tac Toe').addField(array[1][1] + ' ' + array[1][2] + ' ' + array[1][3] + '\n' + array[2][1] + ' ' + array[2][2] + ' ' + array[2][3] + '\n' + array[3][1] + ' ' + array[3][2] + ' ' + array[3][3], `${mentionedUser}'s turn`)
 
-                message.channel.send(exampleEmbed);
+                message.channel.send(playingFieldEmbed);
 
                 message.channel.send("Welcome to Tic Tac Toe, \n Type out `a`, `b` or `c` for the row, then `1`, `2` or `3` for the column. (eg. `a1` for top-left or `b2` for middle). You can also type `end` to end the game.")
 
-                const collector = new Discord.MessageCollector(message.channel, m => m.author.id === mentionedUser.id, {time: 10000});
+                //creates a message collector which will wait for a response
+                const collector = new Discord.MessageCollector(message.channel, m => m.author.id === mentionedUser.id, {time: 20000});
 
                 collector.on('collect', message => {
                     if ((message.content.startsWith('a') || message.content.startsWith('b') || message.content.startsWith('c')) && (message.content.endsWith('1') || message.content.endsWith('2') || message.content.endsWith('3')) && message.content.length == 2) {
@@ -299,7 +302,7 @@ client.on('message', message => {
 });
 
 
-client.on("guildMemberUpdate", function (oldMember, newMember) { // const hasSub = newMember.roles.cache.has("570681515764088873")
+client.on("guildMemberUpdate", function (oldMember, newMember) {
 
     if (newMember.guild.id === "379480837332271105") {
         const hasSub = newMember.roles.cache.has("616806136674385960")
@@ -323,6 +326,7 @@ function getArgs(str) {
     return spaceIndex === -1 ? str : str.substr(spaceIndex).trim();
 }
 
+//Whenever a mention is expected, this function will fetch all the user's data using their Discord ID
 function getUserDataFromMention(mention) {
     if (mention.startsWith('<@') && mention.endsWith('>')) {
         mention = mention.slice(2, -1);
@@ -335,6 +339,7 @@ function getUserDataFromMention(mention) {
     }
 }
 
+//This recursive function handles most of the Tic Tac Toe game
 function nextMove(message, array, mainUser, mentionedUser) {
     if ((message.content.startsWith('a') || message.content.startsWith('b') || message.content.startsWith('c')) && (message.content.endsWith('1') || message.content.endsWith('2') || message.content.endsWith('3')) && message.content.length == 2) {
 
@@ -348,8 +353,13 @@ function nextMove(message, array, mainUser, mentionedUser) {
         } else {
             letter = 3
         }
+
         var number = parseInt(input.charAt(1))
+
+        //Checks if the chosen spot on the board is empty
         if (array[letter][number] === ":black_large_square:") {
+
+            //Check who's turn it is.
             if (message.author == mainUser) {
                 array[letter][number] = ":o:"
                 let gameEnd = checkGameEnd(array, message)
@@ -363,8 +373,6 @@ function nextMove(message, array, mainUser, mentionedUser) {
                         const collector2 = new Discord.MessageCollector(message.channel, m => m.author.id === mentionedUser.id, {time: 20000});
                         collector2.on('collect', message => {
                             nextMove(message, array, mainUser, mentionedUser);
-                            // var nextUser = mentionedUser
-
                             collector2.stop()
                         })
                     }
@@ -384,8 +392,6 @@ function nextMove(message, array, mainUser, mentionedUser) {
                         const collector2 = new Discord.MessageCollector(message.channel, m => m.author.id === mainUser.id, {time: 20000});
                         collector2.on('collect', message => {
                             nextMove(message, array, mainUser, mentionedUser);
-                            // var nextUser = mainUser
-
                             collector2.stop()
                         })
                     }
@@ -411,7 +417,7 @@ function nextMove(message, array, mainUser, mentionedUser) {
         }
 
 
-        const exampleEmbed = new Discord.MessageEmbed().setColor('#0000ff').addField(`${
+        const playingFieldEmbed = new Discord.MessageEmbed().setColor('#0000ff').addField(`${
             array[1][1]
         } ${
             array[1][2]
@@ -431,7 +437,7 @@ function nextMove(message, array, mainUser, mentionedUser) {
             array[3][3]
         }`, `Next turn!`)
 
-        message.channel.send(exampleEmbed);
+        message.channel.send(playingFieldEmbed);
     } else {
         message.channel.send("That\'s not how you play this game lmfao, try doing it right next time")
         if (message.author == mainUser) {
@@ -537,7 +543,7 @@ function checkGameEnd(array, message) {
 
 }
 
-
+//connects to a voice channel and plays a requested song
 async function play(voiceChannel, song, message) {
     try {
         const stream = ytdl(song, {
