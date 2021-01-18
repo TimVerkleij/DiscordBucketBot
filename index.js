@@ -2,12 +2,12 @@ const Discord = require('discord.js');
 const cron = require('cron');
 const client = new Discord.Client();
 const ytdl = require('ytdl-core');
-// const token = require('./config.json').token;
 var NoSQL = require('nosql');
 var fortuneDB = NoSQL.load('./local.fortune.nosql');
 var factsDB = NoSQL.load('./local.facts.nosql');
 var quickchatsDB = NoSQL.load('./local.quickchats.nosql');
-var DMDB = NoSQL.load('./local.directMessages.nosql')
+var DMDB = NoSQL.load('./local.directMessages.nosql');
+var memesDB = NoSQL.load('./local.memes.nosql');
 
 client.on("ready", () => {
     client.user.setActivity('>help', {type: "LISTENING"});
@@ -82,20 +82,31 @@ client.on('message', message => {
 
     if (message.guild === null && !message.author.bot) {
 
-        const d = new Date(message.createdTimestamp);
-        date = d.toLocaleTimeString() + " " + d.toDateString()
+        const satedosUserId = "719187380682358905";
 
-        DMDB.insert({user: message.author.username, message: message.content, date: date})
+        if(message.author.id === satedosUserId){
+            const today = new Date().getTime()
+            message.attachments.every(a => {
+                memesDB.insert({name: a.name, url: a.url, dateAdded: today})
+            })
 
-
-        console.log(`${
-            message.author.username
-        } tried to send a DM:\n${
-            d.toLocaleTimeString()
-        }: ${
-            message.content
-        }`)
-        return
+        } else{
+            const d = new Date(message.createdTimestamp);
+            date = d.toLocaleTimeString() + " " + d.toDateString()
+    
+            DMDB.insert({user: message.author.username, message: message.content, date: date})
+    
+    
+            console.log(`${
+                message.author.username
+            } tried to send a DM:\n${
+                d.toLocaleTimeString()
+            }: ${
+                message.content
+            }`)
+            return
+        }
+        
     }
 
     if (message.guild !== null) {
@@ -182,6 +193,10 @@ client.on('message', message => {
                 }, {
                     name: '`>members`',
                     value: 'Check how many people are in this server',
+                    inline: true
+                }, {
+                    name: '`>meme`',
+                    value: 'Show a random meme',
                     inline: true
                 }
             ]).addField('Music commands:', '>play [youtube url] :arrow_right: I will play you a song in your voice channel\n \n >stop :arrow_right: stop playing music and leave the channel')
@@ -288,6 +303,12 @@ client.on('message', message => {
             })
         } else if (commando === "members"){
             message.channel.send(`This awesome Discord server has ${message.guild.memberCount} members!`)
+        } else if(commando === "meme"){
+            memesDB.find().make(function (filter) {
+                filter.callback(function (err, response) {
+                    message.channel.send(response[Math.floor(Math.random() * response.length)].url)
+                });
+            });
         }
          else {
             message.channel.send("Unknown command, type >help to see the available commands")
