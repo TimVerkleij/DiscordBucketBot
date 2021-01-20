@@ -88,8 +88,8 @@ client.on('message', message => {
             const today = new Date().getTime()
             message.attachments.every(a => {
                 memesDB.insert({name: a.name, url: a.url, dateAdded: today})
+                message.author.send("Meme has been added to the database!")
             })
-
         } else{
             const d = new Date(message.createdTimestamp);
             date = d.toLocaleTimeString() + " " + d.toDateString()
