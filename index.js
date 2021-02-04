@@ -567,15 +567,25 @@ function checkGameEnd(array, message) {
 //connects to a voice channel and plays a requested song
 async function play(voiceChannel, song, message) {
     try {
-        const stream = ytdl(song, {
-            filter: 'audioonly',
-            highWaterMark: 1 << 25
-        });
+        if(song.startsWith("https://")){
+            const stream = ytdl(song, {
+                filter: 'audioonly',
+                highWaterMark: 1 << 25
+            });
+        } else {
+            throw new Error("not a song.")
+        }
+        
         try {
             const connection = await voiceChannel.join(); // ?connect
             const dispatcher = connection.play(stream)
             dispatcher.on('finish', () => voiceChannel.leave());
-        } catch {message.channel.send("Could not connect to your voice channel. Do I have the right permissions? Or are you just being a dick? :frowning: \n Consider asking a moderator to give me permissions :wink:")}} catch {message.channel.send("Video not found. Better luck next time")}}
+        } catch {
+            message.channel.send("Could not connect to your voice channel. Do I have the right permissions? Or are you just being a dick? :frowning: \n Consider asking a moderator to give me permissions :wink:")
+        }
+    } catch {
+        message.channel.send("Video not found. Better luck next time")
+    }}
 
 
 function stopMusic(voiceChannel) {
