@@ -573,7 +573,7 @@ async function play(voiceChannel, song, message) {
                 highWaterMark: 1 << 25
             });
         } else {
-            throw new Error("not a song.")
+            return message.channel.send("Video not found. Better luck next time");
         }
         
         try {
@@ -581,12 +581,11 @@ async function play(voiceChannel, song, message) {
             const dispatcher = connection.play(stream)
             dispatcher.on('finish', () => (voiceChannel.leave()));
         } catch (err) {
-            message.channel.send("Could not connect to your voice channel. Do I have the right permissions? Or are you just being a dick? :frowning: \n Consider asking a moderator to give me permissions :wink:")
+            message.channel.send("Could not connect to your voice channel. Do I have the right permissions? Or are you just being a dick? :frowning: \n Consider asking a moderator to give me permissions :wink:");
             throw err;
         }
-    } catch {
-        message.channel.send("Video not found. Better luck next time");
-    }}
+    }
+}
 
 
 function stopMusic(voiceChannel) {
