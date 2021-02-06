@@ -579,12 +579,13 @@ async function play(voiceChannel, song, message) {
         try {
             const connection = await voiceChannel.join(); // ?connect
             const dispatcher = connection.play(stream)
-            dispatcher.on('finish', () => voiceChannel.leave());
-        } catch {
+            dispatcher.on('finish', () => (voiceChannel.leave()));
+        } catch (err) {
             message.channel.send("Could not connect to your voice channel. Do I have the right permissions? Or are you just being a dick? :frowning: \n Consider asking a moderator to give me permissions :wink:")
+            throw err;
         }
     } catch {
-        message.channel.send("Video not found. Better luck next time")
+        message.channel.send("Video not found. Better luck next time");
     }}
 
 
