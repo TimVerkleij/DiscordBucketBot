@@ -566,7 +566,6 @@ function checkGameEnd(array, message) {
 
 //connects to a voice channel and plays a requested song
 async function play(voiceChannel, song, message) {
-    try {
         if(song.startsWith("https://")){
             const stream = ytdl(song, {
                 filter: 'audioonly',
@@ -584,7 +583,6 @@ async function play(voiceChannel, song, message) {
             message.channel.send("Could not connect to your voice channel. Do I have the right permissions? Or are you just being a dick? :frowning: \n Consider asking a moderator to give me permissions :wink:");
             throw err;
         }
-    }
 }
 
 
