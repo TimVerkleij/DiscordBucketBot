@@ -306,7 +306,11 @@ client.on('message', message => {
         } else if(commando === "meme"){
             memesDB.find().make(function (filter) {
                 filter.callback(function (err, response) {
-                    message.channel.send(response[Math.floor(Math.random() * response.length)].url)
+                    try{
+                        message.channel.send(response[Math.floor(Math.random() * response.length)].url)
+                    } catch{
+                        message.channel.send("Something went wrong :frowning:")
+                    }
                 });
             });
         }
