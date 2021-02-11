@@ -121,11 +121,6 @@ client.on('message', message => {
         }
     }
 
-
-    if (message.content.includes("<@!750667235684515872>")) {
-        message.member.send("Don\'t @ me bruh")
-    }
-
     let newMessage = message.content.toLowerCase()
 
     if (message.content.startsWith(">") && !message.author.bot) {
@@ -149,7 +144,7 @@ client.on('message', message => {
             stopMusic(voiceChannel)
         } else if (commando === "callme") {
             message.channel.send("Hello? <@" + message.member.id + "> , are you there? :telephone_receiver: ")
-        } else if (commando === "help") {
+        } else if (commando === "help" || (message.content.includes("<@!750667235684515872>") && message.content.includes("help"))) {
             const helpMenu = new Discord.MessageEmbed().setColor('#00ff00').setTitle('BucketBot Help Menu').setURL('https://www.youtube.com/c/blastbucketgaming/').setAuthor('BlastBucketGaming', 'https://yt3.ggpht.com/a-/AOh14Ggq46BGHZkdlJ0-7SbxWGD9j8hzapdBQQjS_v3hQA=s100-c-k-c0xffffffff-no-rj-mo', 'https://www.youtube.com/c/blastbucketgaming').setDescription('This is the BucketBot help menu. Here you will find all available commands. The bot only works if you see it online in the member list.').setThumbnail('https://static-cdn.jtvnw.net/jtv_user_pictures/8c77fe3b-7d7d-496b-8f97-5a6ae40c3047-profile_image-70x70.png').addFields([
                 {
                     name: '`>help`',
