@@ -11,46 +11,17 @@ var memesDB = NoSQL.load('./local.memes.nosql');
 
 client.on("ready", () => {
     client.user.setActivity('>help', {type: "LISTENING"});
-
-        console.log("Ready!")
-
-        try {
-
-            let getMembers = function () {
-
-                let mrPoopGuild = client.guilds.cache.get("379480837332271105")
-                return mrPoopGuild.members.fetch().then(members => {
-                    return members
-                })
-
-            }
-
-
-            let allMembers = getMembers()
-
-            allMembers.then(function (result) {
-
-                result.forEach((member) => {
-
-                    const hasSub = member.roles.cache.has("616806136674385960")
-                    const hasGreenSub = member.roles.cache.has("489629999427485717")
-                    if (hasSub && ! hasGreenSub) {
-                        member.roles.add("489629999427485717")
-                    } else if (! hasSub && hasGreenSub) {
-                        member.roles.remove("489629999427485717")
-                    }
-                })
-            })
-        } catch {console.log("Something went wrong")}}
-);
+    console.log("Ready!")
+});
 
 let scheduledMessage = new cron.CronJob('00 00 15 * * *', () => {
 
     console.log("Updating roles...")
 
     let getMembers = function () {
-
-        let mrPoopGuild = client.guilds.cache.get("379480837332271105")
+        const mrPoopGuildId = "379480837332271105"
+        
+        let mrPoopGuild = client.guilds.cache.get(mrPoopGuildId)
         return mrPoopGuild.members.fetch().then(members => {
             return members
         })
@@ -60,18 +31,9 @@ let scheduledMessage = new cron.CronJob('00 00 15 * * *', () => {
     let allMembers = getMembers()
 
     allMembers.then(function (result) {
-        console.log(result.size)
+        console.log(`Checking roles for ${result.size} members...`)
 
-        result.forEach((member) => {
-
-            const hasSub = member.roles.cache.has("616806136674385960")
-            const hasGreenSub = member.roles.cache.has("489629999427485717")
-            if (hasSub && ! hasGreenSub) {
-                member.roles.add("489629999427485717")
-            } else if (! hasSub && hasGreenSub) {
-                member.roles.remove("489629999427485717")
-            }
-        })
+        result.forEach((member) => checkSubRoles(member))
     })
 
 });
@@ -109,26 +71,17 @@ client.on('message', message => {
         
     }
 
-    if (message.guild !== null) {
-        if (message.guild.id === "379480837332271105") {
-            const hasSub = message.member.roles.cache.has("616806136674385960")
-            const hasGreenSub = message.member.roles.cache.has("489629999427485717")
-            if (hasSub && ! hasGreenSub) {
-                message.member.roles.add("489629999427485717")
-            } else if (! hasSub && hasGreenSub) {
-                message.member.roles.remove("489629999427485717")
-            }
-        }
-    }
-
-
-    if (message.content.includes("<@!750667235684515872>")) {
-        message.member.send("Don\'t @ me bruh")
-    }
 
     let newMessage = message.content.toLowerCase()
 
+    if (message.content.includes("<@!750667235684515872>") && message.content.includes("help")) {
+        let helpMenu = generateHelpMenu()
+        message.channel.send(helpMenu)
+    }
+
+
     if (message.content.startsWith(">") && !message.author.bot) {
+        console.log(message.content)
         const userMessage = message.content;
         const commando = getFirstWord(userMessage).substring(1).toLowerCase();
         const args = getArgs(userMessage)
@@ -150,56 +103,7 @@ client.on('message', message => {
         } else if (commando === "callme") {
             message.channel.send("Hello? <@" + message.member.id + "> , are you there? :telephone_receiver: ")
         } else if (commando === "help") {
-            const helpMenu = new Discord.MessageEmbed().setColor('#00ff00').setTitle('BucketBot Help Menu').setURL('https://www.youtube.com/c/blastbucketgaming/').setAuthor('BlastBucketGaming', 'https://yt3.ggpht.com/a-/AOh14Ggq46BGHZkdlJ0-7SbxWGD9j8hzapdBQQjS_v3hQA=s100-c-k-c0xffffffff-no-rj-mo', 'https://www.youtube.com/c/blastbucketgaming').setDescription('This is the BucketBot help menu. Here you will find all available commands. The bot only works if you see it online in the member list.').setThumbnail('https://static-cdn.jtvnw.net/jtv_user_pictures/8c77fe3b-7d7d-496b-8f97-5a6ae40c3047-profile_image-70x70.png').addFields([
-                {
-                    name: '`>help`',
-                    value: 'Shows this help menu',
-                    inline: true
-                },
-                {
-                    name: '`>penis`',
-                    value: 'Shows your penis length',
-                    inline: true
-                },
-                {
-                    name: '`>fortune`',
-                    value: 'I\'m not a fortune teller but I can try :fortune_cookie:',
-                    inline: true
-                },
-                {
-                    name: '`>callme`',
-                    value: 'Let the bot mention you in a message',
-                    inline: true
-                }, {
-                    name: '`>fact`',
-                    value: 'I will tell you a random fact, and you\'re gonna believe it',
-                    inline: true
-                }, {
-                    name: '`>rlchat`',
-                    value: 'THIS IS ROCKET LEAGUE!!!',
-                    inline: true
-                }, {
-                    name: '`>bruh`',
-                    value: 'Bruh.',
-                    inline: true
-                }, {
-                    name: '`>tictactoe`',
-                    value: 'Play a game of tic tac toe against a friend!',
-                    inline: true
-                }, {
-                    name: '`>coinflip`',
-                    value: 'You won\'t win',
-                    inline: true
-                }, {
-                    name: '`>members`',
-                    value: 'Check how many people are in this server',
-                    inline: true
-                }, {
-                    name: '`>meme`',
-                    value: 'Show a random meme',
-                    inline: true
-                }
-            ]).addField('Music commands:', '>play [youtube url] :arrow_right: I will play you a song in your voice channel\n \n >stop :arrow_right: stop playing music and leave the channel')
+            let helpMenu = generateHelpMenu()
             message.channel.send(helpMenu);
         } else if (commando === "fortune") {
             fortuneDB.find().make(function (filter) {
@@ -326,19 +230,93 @@ client.on('message', message => {
 });
 
 
-client.on("guildMemberUpdate", function (oldMember, newMember) {
+client.on("guildMemberUpdate", function (oldMember, member) {
 
-    if (newMember.guild.id === "379480837332271105") {
-        const hasSub = newMember.roles.cache.has("616806136674385960")
-        const hasGreenSub = newMember.roles.cache.has("489629999427485717")
-        if (hasSub && ! hasGreenSub) {
-            newMember.roles.add("489629999427485717")
-        } else if (! hasSub && hasGreenSub) {
-            newMember.roles.remove("489629999427485717")
-        }
+    const mrPoopGuildId = "379480837332271105"
+    if (member.guild.id === mrPoopGuildId) {
+        checkSubRoles(member)
     }
+    // if (member.guild.id === "379480837332271105") {
+    //     const hasSub = member.roles.cache.has("616806136674385960")
+    //     const hasGreenSub = member.roles.cache.has("489629999427485717")
+    //     if (hasSub && ! hasGreenSub) {
+    //         member.roles.add("489629999427485717")
+    //     } else if (! hasSub && hasGreenSub) {
+    //         member.roles.remove("489629999427485717")
+    //     }
+    // }
 });
 
+function generateHelpMenu(){
+    const helpMenu = new Discord.MessageEmbed().setColor('#00ff00').setTitle('BucketBot Help Menu').setURL('https://www.youtube.com/c/blastbucketgaming/').setAuthor('BlastBucketGaming', 'https://yt3.ggpht.com/a-/AOh14Ggq46BGHZkdlJ0-7SbxWGD9j8hzapdBQQjS_v3hQA=s100-c-k-c0xffffffff-no-rj-mo', 'https://www.youtube.com/c/blastbucketgaming').setDescription('This is the BucketBot help menu. Here you will find all available commands. The bot only works if you see it online in the member list.').setThumbnail('https://static-cdn.jtvnw.net/jtv_user_pictures/8c77fe3b-7d7d-496b-8f97-5a6ae40c3047-profile_image-70x70.png').addFields([
+                {
+                    name: '`>help`',
+                    value: 'Shows this help menu',
+                    inline: true
+                },
+                {
+                    name: '`>penis`',
+                    value: 'Shows your penis length',
+                    inline: true
+                },
+                {
+                    name: '`>fortune`',
+                    value: 'I\'m not a fortune teller but I can try :fortune_cookie:',
+                    inline: true
+                },
+                {
+                    name: '`>callme`',
+                    value: 'Let the bot mention you in a message',
+                    inline: true
+                }, {
+                    name: '`>fact`',
+                    value: 'I will tell you a random fact, and you\'re gonna believe it',
+                    inline: true
+                }, {
+                    name: '`>rlchat`',
+                    value: 'THIS IS ROCKET LEAGUE!!!',
+                    inline: true
+                }, {
+                    name: '`>bruh`',
+                    value: 'Bruh.',
+                    inline: true
+                }, {
+                    name: '`>tictactoe`',
+                    value: 'Play a game of tic tac toe against a friend!',
+                    inline: true
+                }, {
+                    name: '`>coinflip`',
+                    value: 'You won\'t win',
+                    inline: true
+                }, {
+                    name: '`>members`',
+                    value: 'Check how many people are in this server',
+                    inline: true
+                }, {
+                    name: '`>ping`',
+                    value: 'Check my response time',
+                    inline: true
+                }, {
+                    name: '`>meme`',
+                    value: 'Show a random meme',
+                    inline: true
+                }
+            ]).addField('Music commands:', '>play [youtube url] :arrow_right: I will play you a song in your voice channel\n \n >stop :arrow_right: stop playing music and leave the channel')
+            return helpMenu
+}
+
+
+function checkSubRoles(member){
+    
+        const hasSub = member.roles.cache.has("616806136674385960")
+        const hasGreenSub = member.roles.cache.has("489629999427485717")
+
+        if (hasSub && ! hasGreenSub) {
+            member.roles.add("489629999427485717")
+        } else if (! hasSub && hasGreenSub) {
+            member.roles.remove("489629999427485717")
+        }
+}
 
 function getFirstWord(str) {
     let spaceIndex = str.indexOf(' ');
@@ -365,9 +343,10 @@ function getUserDataFromMention(mention) {
 
 //This recursive function handles most of the Tic Tac Toe game
 function nextMove(message, array, mainUser, mentionedUser) {
-    if ((message.content.startsWith('a') || message.content.startsWith('b') || message.content.startsWith('c')) && (message.content.endsWith('1') || message.content.endsWith('2') || message.content.endsWith('3')) && message.content.length == 2) {
+    const gameInput = message.content.toLowerCase()
+    if ((gameInput.startsWith('a') || gameInput.startsWith('b') || gameInput.startsWith('c')) && (gameInput.endsWith('1') || gameInput.endsWith('2') || gameInput.endsWith('3')) && gameInput.length == 2) {
 
-        var input = message.content
+        var input = gameInput
         var firstChar = input.charAt(0)
         var letter
         if (firstChar === "a") {
@@ -570,7 +549,7 @@ function checkGameEnd(array, message) {
 //connects to a voice channel and plays a requested song
 async function play(voiceChannel, song, message) {
     // has to be url even though this is a bad check...
-    if (!/https?:\/\/(www\.)?youtu\.?be/i.test(song)) return message.channel.send("Where is the url?");
+    if (!/https?:\/\/(www\.)?youtu\.?be/i.test(song)) return message.channel.send("You did not provide a (valid) link. Grow some brains and give me something to play.");
 
     const stream = ytdl(song, {
         filter: 'audioonly',
