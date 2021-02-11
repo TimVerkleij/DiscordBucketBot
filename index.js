@@ -74,7 +74,7 @@ client.on('message', message => {
 
     let newMessage = message.content.toLowerCase()
 
-    if (message.content.includes("<@!750667235684515872>") && message.content.includes("help")) {
+    if (message.content.includes("<@!750667235684515872>") && newMessage.includes("help")) {
         let helpMenu = generateHelpMenu()
         message.channel.send(helpMenu)
     }
@@ -236,15 +236,6 @@ client.on("guildMemberUpdate", function (oldMember, member) {
     if (member.guild.id === mrPoopGuildId) {
         checkSubRoles(member)
     }
-    // if (member.guild.id === "379480837332271105") {
-    //     const hasSub = member.roles.cache.has("616806136674385960")
-    //     const hasGreenSub = member.roles.cache.has("489629999427485717")
-    //     if (hasSub && ! hasGreenSub) {
-    //         member.roles.add("489629999427485717")
-    //     } else if (! hasSub && hasGreenSub) {
-    //         member.roles.remove("489629999427485717")
-    //     }
-    // }
 });
 
 function generateHelpMenu(){
