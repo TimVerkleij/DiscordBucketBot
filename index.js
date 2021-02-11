@@ -8,6 +8,7 @@ var factsDB = NoSQL.load('./local.facts.nosql');
 var quickchatsDB = NoSQL.load('./local.quickchats.nosql');
 var DMDB = NoSQL.load('./local.directMessages.nosql');
 var memesDB = NoSQL.load('./local.memes.nosql');
+const {PerformanceObserver, performance} = require('perf_hooks');
 
 client.on("ready", () => {
     client.user.setActivity('>help', {type: "LISTENING"});
@@ -213,7 +214,7 @@ client.on('message', message => {
                     message.channel.send(response[Math.floor(Math.random() * response.length)])
                 });
             });
-        } else if (commando === "tictactoe") {
+        } else if (commando === "tictactoe" || commando === "ttt") {
 
             //creates a 3x3 player field full of the black large square emotes
             var a1 = b1 = c1 = a2 = b2 = c2 = a3 = b3 = c3 = ':black_large_square:'
