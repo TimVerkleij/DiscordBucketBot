@@ -570,7 +570,7 @@ function checkGameEnd(array, message) {
 //connects to a voice channel and plays a requested song
 async function play(voiceChannel, song, message) {
     // has to be url even though this is a bad check...
-    if (!/https?:\/\/(www\.)?youtu\.?be/i.test(song)) return message.channel.send("Where is the url?");
+    if (!/https?:\/\/(www\.)?youtu\.?be/i.test(song)) return message.channel.send("You did not provide a (valid) link. Grow some brains and give me something to play.");
 
     const stream = ytdl(song, {
         filter: 'audioonly',
