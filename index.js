@@ -364,9 +364,10 @@ function getUserDataFromMention(mention) {
 
 //This recursive function handles most of the Tic Tac Toe game
 function nextMove(message, array, mainUser, mentionedUser) {
-    if ((message.content.startsWith('a') || message.content.startsWith('b') || message.content.startsWith('c')) && (message.content.endsWith('1') || message.content.endsWith('2') || message.content.endsWith('3')) && message.content.length == 2) {
+    const gameInput = message.content.toLowerCase()
+    if ((gameInput.startsWith('a') || gameInput.startsWith('b') || gameInput.startsWith('c')) && (gameInput.endsWith('1') || gameInput.endsWith('2') || gameInput.endsWith('3')) && gameInput.length == 2) {
 
-        var input = message.content
+        var input = gameInput
         var firstChar = input.charAt(0)
         var letter
         if (firstChar === "a") {
