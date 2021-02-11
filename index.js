@@ -8,7 +8,6 @@ var factsDB = NoSQL.load('./local.facts.nosql');
 var quickchatsDB = NoSQL.load('./local.quickchats.nosql');
 var DMDB = NoSQL.load('./local.directMessages.nosql');
 var memesDB = NoSQL.load('./local.memes.nosql');
-const {PerformanceObserver, performance} = require('perf_hooks');
 
 client.on("ready", () => {
     client.user.setActivity('>help', {type: "LISTENING"});
@@ -302,9 +301,9 @@ client.on('message', message => {
 
                 collector.stop()
             })
-        } else if (commando === "members"){
+        } else if (commando === "members") {
             message.channel.send(`This awesome Discord server has ${message.guild.memberCount} members!`)
-        } else if(commando === "meme"){
+        } else if (commando === "meme") {
             memesDB.find().make(function (filter) {
                 filter.callback(function (err, response) {
                     try{
@@ -314,9 +313,8 @@ client.on('message', message => {
                     }
                 });
             });
-        }
-         else {
-            message.channel.send("Unknown command, type >help to see the available commands")
+        } else if (commando === "ping") {
+            message.channel.send(`My reaction time is ${client.ws.ping} ms`)
         }
     }else if (message.content === "🍆") {
         message.react("🤏")
