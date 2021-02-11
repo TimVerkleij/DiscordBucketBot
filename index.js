@@ -81,7 +81,6 @@ client.on('message', message => {
 
 
     if (message.content.startsWith(">") && !message.author.bot) {
-        console.log(message.content)
         const userMessage = message.content;
         const commando = getFirstWord(userMessage).substring(1).toLowerCase();
         const args = getArgs(userMessage)
