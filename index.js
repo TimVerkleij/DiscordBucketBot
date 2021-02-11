@@ -148,7 +148,7 @@ client.on('message', message => {
         } else if (commando === "stop") {
             stopMusic(voiceChannel)
         } else if (commando === "callme") {
-            message.channel.send("<@" + message.member.id + ">")
+            message.channel.send("Hello? <@" + message.member.id + "> , are you there? :telephone_receiver: ")
         } else if (commando === "help") {
             const helpMenu = new Discord.MessageEmbed().setColor('#00ff00').setTitle('BucketBot Help Menu').setURL('https://www.youtube.com/c/blastbucketgaming/').setAuthor('BlastBucketGaming', 'https://yt3.ggpht.com/a-/AOh14Ggq46BGHZkdlJ0-7SbxWGD9j8hzapdBQQjS_v3hQA=s100-c-k-c0xffffffff-no-rj-mo', 'https://www.youtube.com/c/blastbucketgaming').setDescription('This is the BucketBot help menu. Here you will find all available commands. The bot only works if you see it online in the member list.').setThumbnail('https://static-cdn.jtvnw.net/jtv_user_pictures/8c77fe3b-7d7d-496b-8f97-5a6ae40c3047-profile_image-70x70.png').addFields([
                 {
@@ -213,7 +213,7 @@ client.on('message', message => {
                     message.channel.send(response[Math.floor(Math.random() * response.length)])
                 });
             });
-        } else if (commando === "tictactoe") {
+        } else if (commando === "tictactoe" || commando === "ttt") {
 
             //creates a 3x3 player field full of the black large square emotes
             var a1 = b1 = c1 = a2 = b2 = c2 = a3 = b3 = c3 = ':black_large_square:'
@@ -301,9 +301,9 @@ client.on('message', message => {
 
                 collector.stop()
             })
-        } else if (commando === "members"){
+        } else if (commando === "members") {
             message.channel.send(`This awesome Discord server has ${message.guild.memberCount} members!`)
-        } else if(commando === "meme"){
+        } else if (commando === "meme") {
             memesDB.find().make(function (filter) {
                 filter.callback(function (err, response) {
                     try{
@@ -313,9 +313,8 @@ client.on('message', message => {
                     }
                 });
             });
-        }
-         else {
-            message.channel.send("Unknown command, type >help to see the available commands")
+        } else if (commando === "ping") {
+            message.channel.send(`My reaction time is ${client.ws.ping} ms`)
         }
     }else if (message.content === "🍆") {
         message.react("🤏")
