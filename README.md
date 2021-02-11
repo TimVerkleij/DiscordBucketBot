@@ -13,3 +13,9 @@ npm i <Package name>
 ```
 
 In order to figure out what packages should be installed you can go to the [package.json](/package.json) file. All packages and package versions should be under `dependencies`.
+
+## Starting up
+The application can be run by running the following command in the root folder.
+```
+node .\index.js
+```
