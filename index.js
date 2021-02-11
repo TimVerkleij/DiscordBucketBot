@@ -190,6 +190,10 @@ client.on('message', message => {
                     value: 'Check how many people are in this server',
                     inline: true
                 }, {
+                    name: '`>ping`',
+                    value: 'Check my response time',
+                    inline: true
+                }, {
                     name: '`>meme`',
                     value: 'Show a random meme',
                     inline: true
