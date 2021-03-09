@@ -19,7 +19,7 @@ const helpMenu = require('./services/helpMenu')
 
 //extras
 const {PerformanceObserver, performance} = require('perf_hooks');
-
+let lastCommand
 
 client.on("ready", () => {
     client.user.setActivity('>help', {type: "STREAMING", url: "https://www.twitch.tv/blastbucketgaming"});
@@ -91,12 +91,21 @@ client.on('message', message => {
         message.channel.send(helpMenu)
     }
 
-
+    
     if (message.content.startsWith(">") && !message.author.bot) {
         const userMessage = message.content;
         const commando = getFirstWord(userMessage).substring(1).toLowerCase();
         const args = getArgs(userMessage)
         const voiceChannel = message.member.voice.channel;
+
+        // console.log(lastCommand)
+
+        if(lastCommand) {
+            if (Date.now() - lastCommand.time < 3000 && lastCommand.currentChannel === message.channel.id) {
+                return
+            }
+        }
+
         if (commando === "penis") {
             message.channel.send(message.member.displayName + " has a penis length of " + Math.floor(Math.random() * 10 + 1) + " inches.");
         } else if (commando === "play") {
@@ -248,13 +257,16 @@ client.on('message', message => {
 
 
         }
+
+        let time = Date.now()
+        let currentChannel = message.channel.id
+        lastCommand = {commando, time, currentChannel}
     }else if (message.content === "🍆") {
         message.react("🤏")
         message.react("🍆")
     } else if (newMessage.startsWith("rl.rank")) {
         message.channel.send(`Wrong channel ${message.author} \nGo to <#786661753462980690>`)
     }
-
 });
 
 
