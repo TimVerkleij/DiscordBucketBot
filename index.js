@@ -2,7 +2,11 @@ const Discord = require('discord.js');
 const cron = require('cron');
 const client = new Discord.Client();
 const ytdl = require('ytdl-core');
-var NoSQL = require('nosql');
+const NoSQL = require('nosql');
+const dotenv = require('dotenv');
+dotenv.config();
+
+
 var fortuneDB = NoSQL.load('./local.fortune.nosql');
 var factsDB = NoSQL.load('./local.facts.nosql');
 var quickchatsDB = NoSQL.load('./local.quickchats.nosql');
@@ -10,7 +14,7 @@ var DMDB = NoSQL.load('./local.directMessages.nosql');
 var memesDB = NoSQL.load('./local.memes.nosql');
 
 client.on("ready", () => {
-    client.user.setActivity('>help', {type: "LISTENING"});
+    client.user.setActivity('>help', {type: "STREAMING", url: "https://www.twitch.tv/blastbucketgaming"});
     console.log("Ready!")
 });
 
