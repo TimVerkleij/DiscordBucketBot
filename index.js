@@ -111,8 +111,6 @@ client.on('message', message => {
             }
         } else if (commando === "stop") {
             stopMusic(voiceChannel)
-        } else if (commando === "callme") {
-            message.channel.send("Hello? <@" + message.member.id + "> , are you there? :telephone_receiver: ")
         } else if (commando === "help") {
             let helpMenuMessage = helpMenu.generateHelpMenu()
             message.channel.send(helpMenuMessage);

@@ -17,11 +17,6 @@ module.exports = {
                         name: '`>fortune`',
                         value: 'I\'m not a fortune teller but I can try :fortune_cookie:',
                         inline: true
-                    },
-                    {
-                        name: '`>callme`',
-                        value: 'Let the bot mention you in a message',
-                        inline: true
                     }, {
                         name: '`>fact`',
                         value: 'I will tell you a random fact, and you\'re gonna believe it',
