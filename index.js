@@ -107,7 +107,7 @@ client.on('message', message => {
         }
 
         if (commando === "penis") {
-            message.channel.send(message.member.displayName + " has a penis length of " + Math.floor(Math.random() * 10 + 1) + " inches.");
+            message.channel.send(message.member.displayName + " has a penis length of " + Math.floor(Math.random() * 8 + 1) + " inches.");
         } else if (commando === "play") {
             if (args !== ">play") {
                 if (voiceChannel) {
