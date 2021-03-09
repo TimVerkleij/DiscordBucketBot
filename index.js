@@ -16,6 +16,10 @@ var memesDB = NoSQL.load('./local.memes.nosql');
 //service imports
 const tictactoe = require('./services/tictactoe')
 
+//extras
+const {PerformanceObserver, performance} = require('perf_hooks');
+
+
 client.on("ready", () => {
     client.user.setActivity('>help', {type: "STREAMING", url: "https://www.twitch.tv/blastbucketgaming"});
     console.log("Ready!")
@@ -224,7 +228,26 @@ client.on('message', message => {
                 });
             });
         } else if (commando === "ping") {
+
+            const randomLettersArray = ["a", "b", "c", "d", "e", "f"]
+            let randomLetter = randomLettersArray[Math.floor(Math.random() * randomLettersArray.length)]
+
             message.channel.send(`My reaction time is ${client.ws.ping} ms`)
+            message.channel.send(`But how fast are you? Quick! Say type the letter \`${randomLetter}\``)
+
+            let t0 = performance.now()
+
+            const collector = new Discord.MessageCollector(message.channel, m => m.author.id === message.author.id, {time: 20000});
+
+            collector.on('collect', message => {
+                let time = performance.now() - t0
+                if(message.content === randomLetter){
+                    message.channel.send(`You took ${time} ms.`)
+                }
+                collector.stop()
+            })
+
+
         }
     }else if (message.content === "🍆") {
         message.react("🤏")
