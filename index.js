@@ -269,7 +269,6 @@ client.on('message', message => {
 
 
 client.on("guildMemberUpdate", function (oldMember, member) {
-
     const mrPoopGuildId = "379480837332271105"
     if (member.guild.id === mrPoopGuildId) {
         checkSubRoles(member)
@@ -280,13 +279,16 @@ client.on("guildMemberUpdate", function (oldMember, member) {
 
 function checkSubRoles(member){
     
-        const hasSub = member.roles.cache.has("616806136674385960")
-        const hasGreenSub = member.roles.cache.has("489629999427485717")
+        const twitchSubrole = "818893751261986887"
+        const greenSubRole = "489629999427485717"
+
+        const hasSub = member.roles.cache.has(twitchSubrole)
+        const hasGreenSub = member.roles.cache.has(greenSubRole)
 
         if (hasSub && ! hasGreenSub) {
-            member.roles.add("489629999427485717")
+            member.roles.add(greenSubRole)
         } else if (! hasSub && hasGreenSub) {
-            member.roles.remove("489629999427485717")
+            member.roles.remove(greenSubRole)
         }
 }
 
