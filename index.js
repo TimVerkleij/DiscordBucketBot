@@ -107,15 +107,20 @@ client.on('message', message => {
         if (commando === "penis") {
             message.channel.send(message.member.displayName + " has a penis length of " + Math.floor(Math.random() * 8 + 1) + " inches.");
         } else if (commando === "play") {
-            if (args !== ">play") {
-                if (voiceChannel) {
-                    music.play(voiceChannel, args, message)
-                } else {
-                    message.channel.send("You don\'t seem to be in a voice channel")
-                }
-            } else {
-                message.channel.send("You didn\'t give me a song to play dummy")
+
+            //check if user sent a song
+            if(args === ">play"){
+                return message.channel.send("You didn\'t give me a song to play dummy")
             }
+
+            //check if user is in a voicechannel
+            if(!voiceChannel){
+                return message.channel.send("You don\'t seem to be in a voice channel")
+            }
+
+            //play music
+            music.play(voiceChannel, args, message)
+
         } else if (commando === "stop") {
             music.stopMusic(voiceChannel)
         } else if (commando === "help") {
