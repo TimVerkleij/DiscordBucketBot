@@ -1,7 +1,6 @@
 const Discord = require('discord.js');
 const cron = require('cron');
 const client = new Discord.Client();
-const ytdl = require('ytdl-core');
 const NoSQL = require('nosql');
 const dotenv = require('dotenv');
 dotenv.config();
@@ -16,6 +15,7 @@ var memesDB = NoSQL.load('./local.memes.nosql');
 //service imports
 const tictactoe = require('./services/tictactoe')
 const helpMenu = require('./services/helpMenu')
+const music = require('./services/music')
 
 //extras
 const {PerformanceObserver, performance} = require('perf_hooks');
@@ -98,10 +98,8 @@ client.on('message', message => {
         const args = getArgs(userMessage)
         const voiceChannel = message.member.voice.channel;
 
-        // console.log(lastCommand)
-
         if(lastCommand) {
-            if (Date.now() - lastCommand.time < 3000 && lastCommand.currentChannel === message.channel.id) {
+            if (Date.now() - lastCommand.time < 4000 && lastCommand.currentChannel === message.channel.id) {
                 return
             }
         }
@@ -111,7 +109,7 @@ client.on('message', message => {
         } else if (commando === "play") {
             if (args !== ">play") {
                 if (voiceChannel) {
-                    play(voiceChannel, args, message)
+                    music.play(voiceChannel, args, message)
                 } else {
                     message.channel.send("You don\'t seem to be in a voice channel")
                 }
@@ -119,7 +117,7 @@ client.on('message', message => {
                 message.channel.send("You didn\'t give me a song to play dummy")
             }
         } else if (commando === "stop") {
-            stopMusic(voiceChannel)
+            music.stopMusic(voiceChannel)
         } else if (commando === "help") {
             let helpMenuMessage = helpMenu.generateHelpMenu()
             message.channel.send(helpMenuMessage);
@@ -315,29 +313,6 @@ function getUserDataFromMention(mention) {
     }
 }
 
-//connects to a voice channel and plays a requested song
-async function play(voiceChannel, song, message) {
-    // has to be url even though this is a bad check...
-    if (!/https?:\/\/(www\.)?youtu\.?be/i.test(song)) return message.channel.send("You did not provide a (valid) link. Grow some brains and give me something to play.");
 
-    const stream = ytdl(song, {
-        filter: 'audioonly',
-        highWaterMark: 1 << 25
-    });
-    if (!stream) return message.channel.send("Video not found. Better luck next time");
-
-    try {
-        const connection = await voiceChannel.join(); // ?connect
-        const dispatcher = connection.play(stream)
-        dispatcher.on('finish', () => voiceChannel.leave());
-    } catch {
-        message.channel.send("Could not connect to your voice channel. Do I have the right permissions? Or are you just being a dick? :frowning: \n Consider asking a moderator to give me permissions :wink:");
-    }
-}
-
-
-function stopMusic(voiceChannel) {
-    voiceChannel.leave()
-}
 
 client.login(process.env.BOT_TOKEN);
