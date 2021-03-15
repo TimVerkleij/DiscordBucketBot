@@ -1,7 +1,6 @@
 const Discord = require('discord.js');
 const cron = require('cron');
 const client = new Discord.Client();
-const ytdl = require('ytdl-core');
 const NoSQL = require('nosql');
 const dotenv = require('dotenv');
 dotenv.config();
@@ -16,9 +15,9 @@ var memesDB = NoSQL.load('./local.memes.nosql');
 //service imports
 const tictactoe = require('./services/tictactoe')
 const helpMenu = require('./services/helpMenu')
+const music = require('./services/music')
 
 //extras
-const {PerformanceObserver, performance} = require('perf_hooks');
 let lastCommand
 
 client.on("ready", () => {
@@ -98,10 +97,8 @@ client.on('message', message => {
         const args = getArgs(userMessage)
         const voiceChannel = message.member.voice.channel;
 
-        // console.log(lastCommand)
-
         if(lastCommand) {
-            if (Date.now() - lastCommand.time < 3000 && lastCommand.currentChannel === message.channel.id) {
+            if (Date.now() - lastCommand.time < 4000 && lastCommand.currentChannel === message.channel.id) {
                 return
             }
         }
@@ -109,17 +106,22 @@ client.on('message', message => {
         if (commando === "penis") {
             message.channel.send(message.member.displayName + " has a penis length of " + Math.floor(Math.random() * 8 + 1) + " inches.");
         } else if (commando === "play") {
-            if (args !== ">play") {
-                if (voiceChannel) {
-                    play(voiceChannel, args, message)
-                } else {
-                    message.channel.send("You don\'t seem to be in a voice channel")
-                }
-            } else {
-                message.channel.send("You didn\'t give me a song to play dummy")
+
+            //check if user sent a song
+            if(args === ">play"){
+                return message.channel.send("You didn\'t give me a song to play dummy")
             }
+
+            //check if user is in a voicechannel
+            if(!voiceChannel){
+                return message.channel.send("You don\'t seem to be in a voice channel")
+            }
+
+            //play music
+            music.play(voiceChannel, args, message)
+
         } else if (commando === "stop") {
-            stopMusic(voiceChannel)
+            music.stopMusic(voiceChannel)
         } else if (commando === "help") {
             let helpMenuMessage = helpMenu.generateHelpMenu()
             message.channel.send(helpMenuMessage);
@@ -236,26 +238,7 @@ client.on('message', message => {
                 });
             });
         } else if (commando === "ping") {
-
-            const randomLettersArray = ["a", "b", "c", "d", "e", "f"]
-            let randomLetter = randomLettersArray[Math.floor(Math.random() * randomLettersArray.length)]
-
             message.channel.send(`My reaction time is ${client.ws.ping} ms`)
-            message.channel.send(`But how fast are you? Quick! Say type the letter \`${randomLetter}\``)
-
-            let t0 = performance.now()
-
-            const collector = new Discord.MessageCollector(message.channel, m => m.author.id === message.author.id, {time: 20000});
-
-            collector.on('collect', message => {
-                let time = performance.now() - t0
-                if(message.content === randomLetter){
-                    message.channel.send(`You took ${time} ms.`)
-                }
-                collector.stop()
-            })
-
-
         }
 
         let time = Date.now()
@@ -271,7 +254,6 @@ client.on('message', message => {
 
 
 client.on("guildMemberUpdate", function (oldMember, member) {
-
     const mrPoopGuildId = "379480837332271105"
     if (member.guild.id === mrPoopGuildId) {
         checkSubRoles(member)
@@ -282,13 +264,16 @@ client.on("guildMemberUpdate", function (oldMember, member) {
 
 function checkSubRoles(member){
     
-        const hasSub = member.roles.cache.has("616806136674385960")
-        const hasGreenSub = member.roles.cache.has("489629999427485717")
+        const twitchSubrole = "818893751261986887"
+        const greenSubRole = "489629999427485717"
+
+        const hasSub = member.roles.cache.has(twitchSubrole)
+        const hasGreenSub = member.roles.cache.has(greenSubRole)
 
         if (hasSub && ! hasGreenSub) {
-            member.roles.add("489629999427485717")
+            member.roles.add(greenSubRole)
         } else if (! hasSub && hasGreenSub) {
-            member.roles.remove("489629999427485717")
+            member.roles.remove(greenSubRole)
         }
 }
 
@@ -315,29 +300,6 @@ function getUserDataFromMention(mention) {
     }
 }
 
-//connects to a voice channel and plays a requested song
-async function play(voiceChannel, song, message) {
-    // has to be url even though this is a bad check...
-    if (!/https?:\/\/(www\.)?youtu\.?be/i.test(song)) return message.channel.send("You did not provide a (valid) link. Grow some brains and give me something to play.");
 
-    const stream = ytdl(song, {
-        filter: 'audioonly',
-        highWaterMark: 1 << 25
-    });
-    if (!stream) return message.channel.send("Video not found. Better luck next time");
-
-    try {
-        const connection = await voiceChannel.join(); // ?connect
-        const dispatcher = connection.play(stream)
-        dispatcher.on('finish', () => voiceChannel.leave());
-    } catch {
-        message.channel.send("Could not connect to your voice channel. Do I have the right permissions? Or are you just being a dick? :frowning: \n Consider asking a moderator to give me permissions :wink:");
-    }
-}
-
-
-function stopMusic(voiceChannel) {
-    voiceChannel.leave()
-}
 
 client.login(process.env.BOT_TOKEN);
