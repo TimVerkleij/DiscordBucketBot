@@ -9,10 +9,8 @@ npm
 ```
 This Node Application needs a few packages to function properly. These packages can be installed using the following command.
 ```
-npm i <Package name>
+npm i
 ```
-
-In order to figure out what packages should be installed you can go to the [package.json](/package.json) file. All packages and package versions should be under `dependencies`.
 
 ## Starting up
 The application can be run by running the following command in the root folder.
