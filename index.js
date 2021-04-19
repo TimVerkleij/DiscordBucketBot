@@ -90,7 +90,7 @@ client.on('message', message => {
         message.channel.send(helpMenu)
     }
 
-    
+
     if (message.content.startsWith(">") && !message.author.bot) {
         const userMessage = message.content;
         const commando = getFirstWord(userMessage).substring(1).toLowerCase();
@@ -299,7 +299,5 @@ function getUserDataFromMention(mention) {
         return client.users.cache.get(mention);
     }
 }
-
-
 
 client.login(process.env.BOT_TOKEN);
