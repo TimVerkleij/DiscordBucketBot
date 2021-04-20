@@ -90,7 +90,7 @@ client.on('message', message => {
         message.channel.send(helpMenu)
     }
 
-    
+
     if (message.content.startsWith(">") && !message.author.bot) {
         const userMessage = message.content;
         const commando = getFirstWord(userMessage).substring(1).toLowerCase();
@@ -260,7 +260,26 @@ client.on("guildMemberUpdate", function (oldMember, member) {
     }
 });
 
+client.on('voiceStateUpdate', (oldState, newState) => {
+    
+    //Voice channel that the client is currently connected to
+    let connectedVoiceChannel = oldState.guild.voice?.channel
 
+    if(connectedVoiceChannel){
+
+        //Amount of non-bot members present in the connected voice channel
+        let membersInVoiceChannel = connectedVoiceChannel.members.filter(x => {
+            if(x.user.bot === false){
+                return x
+            }
+        }).size
+
+        //Leave Voice channel if all humans left
+        if(membersInVoiceChannel == 0){
+            connectedVoiceChannel.leave()
+        }
+    }
+})
 
 function checkSubRoles(member){
     
@@ -299,7 +318,5 @@ function getUserDataFromMention(mention) {
         return client.users.cache.get(mention);
     }
 }
-
-
 
 client.login(process.env.BOT_TOKEN);
