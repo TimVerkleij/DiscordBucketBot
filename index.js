@@ -121,7 +121,16 @@ client.on('message', message => {
             music.play(voiceChannel, args, message)
 
         } else if (commando === "stop") {
-            music.stopMusic(voiceChannel)
+            let connectedVoiceChannelClient = message.guild.voice?.channel
+            let connectedVoiceChannelMember = message.member.voice?.channel
+
+            if(connectedVoiceChannelClient === connectedVoiceChannelMember){
+                music.stopMusic(voiceChannel)
+            } else {
+                message.channel.send(`We're not in the same voice channel :slight_frown:`)
+            }
+
+                
         } else if (commando === "help") {
             let helpMenuMessage = helpMenu.generateHelpMenu()
             message.channel.send(helpMenuMessage);
