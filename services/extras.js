@@ -11,5 +11,13 @@ module.exports = {
 
             return mention;
         }
+    },
+    getArgs(str) {
+        let spaceIndex = str.indexOf(' ');
+        return spaceIndex === -1 ? str : str.substr(spaceIndex).trim();
+    },
+    getFirstWord(str) {
+        let spaceIndex = str.indexOf(' ');
+        return spaceIndex === -1 ? str : str.substr(0, spaceIndex);
     }
 }

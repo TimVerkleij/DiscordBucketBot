@@ -62,8 +62,8 @@ client.on('message', message => {
 
     if (message.content.startsWith(">") && !message.author.bot) {
         const userMessage = message.content;
-        const commando = getFirstWord(userMessage).substring(1).toLowerCase();
-        const args = getArgs(userMessage)
+        const commando = extras.getFirstWord(userMessage).substring(1).toLowerCase();
+        const args = extras.getArgs(userMessage)
         const voiceChannel = message.member.voice.channel;
 
         if(lastCommand) {
@@ -264,16 +264,5 @@ function checkSubRoles(member){
             member.roles.remove(greenSubRole)
         }
 }
-
-function getFirstWord(str) {
-    let spaceIndex = str.indexOf(' ');
-    return spaceIndex === -1 ? str : str.substr(0, spaceIndex);
-};
-
-function getArgs(str) {
-    let spaceIndex = str.indexOf(' ');
-    return spaceIndex === -1 ? str : str.substr(spaceIndex).trim();
-}
-
 
 client.login(process.env.BOT_TOKEN);
