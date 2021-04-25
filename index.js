@@ -9,13 +9,13 @@ dotenv.config();
 var fortuneDB = NoSQL.load('./local.fortune.nosql');
 var factsDB = NoSQL.load('./local.facts.nosql');
 var quickchatsDB = NoSQL.load('./local.quickchats.nosql');
-var DMDB = NoSQL.load('./local.directMessages.nosql');
 var memesDB = NoSQL.load('./local.memes.nosql');
 
 //service imports
 const tictactoe = require('./services/tictactoe')
 const helpMenu = require('./services/helpMenu')
 const music = require('./services/music')
+const extras = require('./services/extras')
 
 //extras
 let lastCommand
@@ -52,37 +52,6 @@ let scheduledMessage = new cron.CronJob('00 00 15 * * *', () => {
 scheduledMessage.start();
 
 client.on('message', message => {
-
-    if (message.guild === null && !message.author.bot) {
-
-        const satedosUserId = "719187380682358905";
-
-        if(message.author.id === satedosUserId){
-            const today = new Date().getTime()
-            message.attachments.every(a => {
-                memesDB.insert({name: a.name, url: a.url, dateAdded: today})
-                message.author.send("Meme has been added to the database!")
-            })
-        } else{
-            const d = new Date(message.createdTimestamp);
-            date = d.toLocaleTimeString() + " " + d.toDateString()
-    
-            DMDB.insert({user: message.author.username, message: message.content, date: date})
-    
-    
-            console.log(`${
-                message.author.username
-            } tried to send a DM:\n${
-                d.toLocaleTimeString()
-            }: ${
-                message.content
-            }`)
-            return
-        }
-        
-    }
-
-
     let newMessage = message.content.toLowerCase()
 
     if (message.content.includes("<@!750667235684515872>") && newMessage.includes("help")) {
@@ -93,8 +62,8 @@ client.on('message', message => {
 
     if (message.content.startsWith(">") && !message.author.bot) {
         const userMessage = message.content;
-        const commando = getFirstWord(userMessage).substring(1).toLowerCase();
-        const args = getArgs(userMessage)
+        const commando = extras.getFirstWord(userMessage).substring(1).toLowerCase();
+        const args = extras.getArgs(userMessage)
         const voiceChannel = message.member.voice.channel;
 
         if(lastCommand) {
@@ -121,7 +90,16 @@ client.on('message', message => {
             music.play(voiceChannel, args, message)
 
         } else if (commando === "stop") {
-            music.stopMusic(voiceChannel)
+            let connectedVoiceChannelClient = message.guild.voice?.channel
+            let connectedVoiceChannelMember = message.member.voice?.channel
+
+            if(connectedVoiceChannelClient === connectedVoiceChannelMember){
+                music.stopMusic(voiceChannel)
+            } else {
+                message.channel.send(`We're not in the same voice channel :slight_frown:`)
+            }
+
+                
         } else if (commando === "help") {
             let helpMenuMessage = helpMenu.generateHelpMenu()
             message.channel.send(helpMenuMessage);
@@ -156,7 +134,8 @@ client.on('message', message => {
             ]
 
             if (args.startsWith('<@') && args.endsWith('>') && ! args.includes(' ')) {
-                var mentionedUser = getUserDataFromMention(args) // gets id from person who was challenged
+                // gets id from person who was challenged
+                var mentionedUser = client.users.cache.get(extras.getUserDataFromMention(args)) 
                 var mainUser = message.author // gets id from the challenger
 
                 //Checks if the challenged user is valid
@@ -227,16 +206,6 @@ client.on('message', message => {
             })
         } else if (commando === "members") {
             message.channel.send(`This awesome Discord server has ${message.guild.memberCount} members!`)
-        } else if (commando === "meme") {
-            memesDB.find().make(function (filter) {
-                filter.callback(function (err, response) {
-                    try{
-                        message.channel.send(response[Math.floor(Math.random() * response.length)].url)
-                    } catch{
-                        message.channel.send("Something went wrong :frowning:")
-                    }
-                });
-            });
         } else if (commando === "ping") {
             message.channel.send(`My reaction time is ${client.ws.ping} ms`)
         }
@@ -294,29 +263,6 @@ function checkSubRoles(member){
         } else if (! hasSub && hasGreenSub) {
             member.roles.remove(greenSubRole)
         }
-}
-
-function getFirstWord(str) {
-    let spaceIndex = str.indexOf(' ');
-    return spaceIndex === -1 ? str : str.substr(0, spaceIndex);
-};
-
-function getArgs(str) {
-    let spaceIndex = str.indexOf(' ');
-    return spaceIndex === -1 ? str : str.substr(spaceIndex).trim();
-}
-
-//Whenever a mention is expected, this function will fetch all the user's data using their Discord ID
-function getUserDataFromMention(mention) {
-    if (mention.startsWith('<@') && mention.endsWith('>')) {
-        mention = mention.slice(2, -1);
-
-        if (mention.startsWith('!')) {
-            mention = mention.slice(1);
-        }
-
-        return client.users.cache.get(mention);
-    }
 }
 
 client.login(process.env.BOT_TOKEN);
