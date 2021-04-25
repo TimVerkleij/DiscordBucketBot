@@ -15,6 +15,7 @@ var memesDB = NoSQL.load('./local.memes.nosql');
 const tictactoe = require('./services/tictactoe')
 const helpMenu = require('./services/helpMenu')
 const music = require('./services/music')
+const extras = require('./services/extras')
 
 //extras
 let lastCommand
@@ -133,7 +134,8 @@ client.on('message', message => {
             ]
 
             if (args.startsWith('<@') && args.endsWith('>') && ! args.includes(' ')) {
-                var mentionedUser = getUserDataFromMention(args) // gets id from person who was challenged
+                // gets id from person who was challenged
+                var mentionedUser = client.users.cache.get(extras.getUserDataFromMention(args)) 
                 var mainUser = message.author // gets id from the challenger
 
                 //Checks if the challenged user is valid
@@ -273,17 +275,5 @@ function getArgs(str) {
     return spaceIndex === -1 ? str : str.substr(spaceIndex).trim();
 }
 
-//Whenever a mention is expected, this function will fetch all the user's data using their Discord ID
-function getUserDataFromMention(mention) {
-    if (mention.startsWith('<@') && mention.endsWith('>')) {
-        mention = mention.slice(2, -1);
-
-        if (mention.startsWith('!')) {
-            mention = mention.slice(1);
-        }
-
-        return client.users.cache.get(mention);
-    }
-}
 
 client.login(process.env.BOT_TOKEN);
