@@ -204,16 +204,6 @@ client.on('message', message => {
             })
         } else if (commando === "members") {
             message.channel.send(`This awesome Discord server has ${message.guild.memberCount} members!`)
-        } else if (commando === "meme") {
-            memesDB.find().make(function (filter) {
-                filter.callback(function (err, response) {
-                    try{
-                        message.channel.send(response[Math.floor(Math.random() * response.length)].url)
-                    } catch{
-                        message.channel.send("Something went wrong :frowning:")
-                    }
-                });
-            });
         } else if (commando === "ping") {
             message.channel.send(`My reaction time is ${client.ws.ping} ms`)
         }

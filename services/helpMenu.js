@@ -45,10 +45,6 @@ module.exports = {
                         name: '`>ping`',
                         value: 'Check my response time',
                         inline: true
-                    }, {
-                        name: '`>meme`',
-                        value: 'Show a random meme',
-                        inline: true
                     }
                 ]).addField('Music commands:', '>play [youtube url] :arrow_right: I will play you a song in your voice channel\n \n >stop :arrow_right: stop playing music and leave the channel')
                 return helpMenu
