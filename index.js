@@ -9,7 +9,6 @@ dotenv.config();
 var fortuneDB = NoSQL.load('./local.fortune.nosql');
 var factsDB = NoSQL.load('./local.facts.nosql');
 var quickchatsDB = NoSQL.load('./local.quickchats.nosql');
-var DMDB = NoSQL.load('./local.directMessages.nosql');
 var memesDB = NoSQL.load('./local.memes.nosql');
 
 //service imports
@@ -52,37 +51,6 @@ let scheduledMessage = new cron.CronJob('00 00 15 * * *', () => {
 scheduledMessage.start();
 
 client.on('message', message => {
-
-    if (message.guild === null && !message.author.bot) {
-
-        const satedosUserId = "719187380682358905";
-
-        if(message.author.id === satedosUserId){
-            const today = new Date().getTime()
-            message.attachments.every(a => {
-                memesDB.insert({name: a.name, url: a.url, dateAdded: today})
-                message.author.send("Meme has been added to the database!")
-            })
-        } else{
-            const d = new Date(message.createdTimestamp);
-            date = d.toLocaleTimeString() + " " + d.toDateString()
-    
-            DMDB.insert({user: message.author.username, message: message.content, date: date})
-    
-    
-            console.log(`${
-                message.author.username
-            } tried to send a DM:\n${
-                d.toLocaleTimeString()
-            }: ${
-                message.content
-            }`)
-            return
-        }
-        
-    }
-
-
     let newMessage = message.content.toLowerCase()
 
     if (message.content.includes("<@!750667235684515872>") && newMessage.includes("help")) {
