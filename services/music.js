@@ -19,6 +19,7 @@ module.exports = {
             return message.channel.send("Video not found. Better luck next time");
         
         queue.push(stream)
+        message.react('👍')
 
         if(queue.length === 1) {
             await playNextSong(voiceChannel, message)
